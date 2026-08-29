@@ -66,14 +66,14 @@ def index():
 
         items = query.limit(100).all()
 
-        # Statistiques pour les widgets du dashboard
+        # Statistiques globales pour les KPI cards
         total_opportunites = db.query(Opportunity).count()
-        nb_nouveaux = db.query(Opportunity).filter(Opportunity.status == "nouveau").count()
-        nb_qualifies = db.query(Opportunity).filter(Opportunity.status == "qualifie").count()
-        nb_bc_generes = db.query(Opportunity).filter(Opportunity.business_case.isnot(None)).count()
         nb_hot_score = db.query(Opportunity).filter(Opportunity.score >= 70.0).count()
+        nb_qualified_score = db.query(Opportunity).filter(Opportunity.score >= 50.0, Opportunity.score < 70.0).count()
+        nb_cold_score = db.query(Opportunity).filter(Opportunity.score < 50.0).count()
+        nb_bc_generes = db.query(Opportunity).filter(Opportunity.business_case.isnot(None)).count()
         
-        # Sources et signaux disponibles pour les menus déroulants
+        # Sources et statuts
         toutes_sources = [s[0] for s in db.query(Opportunity.source).distinct().all() if s[0]]
         tous_statuts = ["nouveau", "qualifie", "en_cours", "rejete", "business_case_genere"]
         tous_signaux = [s[0] for s in db.query(Opportunity.signal_type).distinct().all() if s[0]]
@@ -83,10 +83,10 @@ def index():
             items=items,
             total=len(items),
             total_global=total_opportunites,
-            nb_nouveaux=nb_nouveaux,
-            nb_qualifies=nb_qualifies,
-            nb_bc_generes=nb_bc_generes,
             nb_hot_score=nb_hot_score,
+            nb_qualified_score=nb_qualified_score,
+            nb_cold_score=nb_cold_score,
+            nb_bc_generes=nb_bc_generes,
             toutes_sources=toutes_sources,
             tous_statuts=tous_statuts,
             tous_signaux=tous_signaux,
