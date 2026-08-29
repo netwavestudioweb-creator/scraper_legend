@@ -1,5 +1,6 @@
 import os
 import sys
+import hmac
 
 # Ajoute la racine du projet au path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -10,6 +11,13 @@ from db.models import Opportunity
 from config import PORT, DEBUG
 from core.scoring import recalculate_all_scores
 from core.business_case import generate_for_opportunity_id
+from connectors.hackernews import HackerNewsConnector
+from connectors.producthunt import ProductHuntConnector
+from connectors.github_trending import GitHubTrendingConnector
+from connectors.stackexchange import StackExchangeConnector
+from connectors.betalist import BetaListConnector
+from connectors.appsumo import AppSumoConnector
+from connectors.wellfound import WellfoundConnector
 
 app = Flask(__name__)
 
@@ -156,15 +164,89 @@ def trigger_recalculate():
         return jsonify({"success": False, "error": str(e)}), 500
 
 
-@app.route("/api/trigger-scrape", methods=["POST"])
-def trigger_scrape():
-    """Déclenche une collecte complète multi-sources avec scoring."""
-    from main import run_all
+@app.route("/admin/trigger-collection", methods=["POST", "GET"])
+def admin_trigger_collection():
+    """
+    Route sécurisée pour déclencher la collecte multi-sources et le scoring en production.
+    Protégée par la variable d'environnement ADMIN_TRIGGER_KEY.
+    """
+    expected_key = os.environ.get("ADMIN_TRIGGER_KEY", "").strip()
+    if not expected_key:
+        return jsonify({
+            "success": False,
+            "error": "La variable d'environnement ADMIN_TRIGGER_KEY n'est pas configurée sur le serveur."
+        }), 403
+
+    # Récupération de la clé depuis l'en-tête, le query param ou le corps JSON
+    auth_header = request.headers.get("X-Admin-Key") or request.headers.get("Authorization", "")
+    if auth_header.startswith("Bearer "):
+        provided_key = auth_header.replace("Bearer ", "").strip()
+    else:
+        provided_key = auth_header.strip()
+
+    if not provided_key:
+        provided_key = request.args.get("key", "").strip()
+    if not provided_key and request.is_json:
+        provided_key = (request.json or {}).get("key", "").strip()
+
+    if not hmac.compare_digest(provided_key, expected_key):
+        return jsonify({"success": False, "error": "Accès non autorisé : Clé ADMIN_TRIGGER_KEY invalide ou manquante."}), 401
+
+    # Exécution sécurisée de la collecte
+    connecteurs = [
+        HackerNewsConnector(tag="show_hn", max_items=25),
+        HackerNewsConnector(tag="ask_hn", max_items=15),
+        ProductHuntConnector(max_items=20),
+        GitHubTrendingConnector(max_items=20),
+        StackExchangeConnector(site="softwarerecs", max_items=20),
+        BetaListConnector(max_items=20),
+        AppSumoConnector(max_items=20),
+        WellfoundConnector(max_items=15),
+    ]
+
+    total_nouveaux = 0
+    total_doublons = 0
+    statistiques_sources = {}
+    erreurs = []
+
+    for connecteur in connecteurs:
+        nom_source = connecteur.source_name
+        if hasattr(connecteur, "tag"):
+            nom_source = f"{nom_source} ({connecteur.tag})"
+
+        try:
+            nouveaux, doublons = connecteur.run()
+            total_nouveaux += nouveaux
+            total_doublons += doublons
+            statistiques_sources[nom_source] = {
+                "nouveaux": nouveaux,
+                "doublons": doublons,
+                "statut": "Succès"
+            }
+        except Exception as e:
+            erreurs.append(f"{nom_source}: {str(e)}")
+            statistiques_sources[nom_source] = {
+                "nouveaux": 0,
+                "doublons": 0,
+                "statut": f"Erreur ({str(e)})"
+            }
+
+    # Recalcul automatique du scoring
     try:
-        run_all()
-        return jsonify({"success": True, "message": "Collecte et scoring exécutés avec succès."})
+        nb_scores = recalculate_all_scores()
     except Exception as e:
-        return jsonify({"success": False, "error": str(e)}), 500
+        nb_scores = 0
+        erreurs.append(f"Scoring: {str(e)}")
+
+    return jsonify({
+        "success": True,
+        "message": "Collecte multi-sources et scoring exécutés avec succès en production.",
+        "total_nouvelles_opportunites": total_nouveaux,
+        "total_doublons_ignores": total_doublons,
+        "total_opportunites_scorees": nb_scores,
+        "statistiques_par_source": statistiques_sources,
+        "erreurs": erreurs
+    })
 
 
 if __name__ == "__main__":
