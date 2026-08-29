@@ -2,6 +2,7 @@
 
 Moteur de veille concurrentielle multi-sources conçu pour détecter les signaux faibles, les opportunités SaaS / tech et les besoins non résolus à travers le web, avec scoring prédictif et génération automatisée de business cases.
 
+[![GitHub Repo](https://img.shields.io/badge/GitHub-netwavestudioweb--creator%2Fscraper__legend-blue?logo=github)](https://github.com/netwavestudioweb-creator/scraper_legend)
 [![Python](https://img.shields.io/badge/Python-3.11+-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![Flask](https://img.shields.io/badge/Flask-3.0.3-000000?logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Ready-336791?logo=postgresql&logoColor=white)](https://www.postgresql.org/)
