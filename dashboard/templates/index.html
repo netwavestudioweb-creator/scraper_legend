@@ -1,52 +1,58 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scraper Légende — Veille SaaS & Opportunités</title>
-    <!-- Favicon SVG Radar / Scan -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='46' fill='%230b0f19' stroke='%233b82f6' stroke-width='4'/><circle cx='50' cy='50' r='30' fill='none' stroke='%233b82f6' stroke-width='2' stroke-opacity='0.4'/><circle cx='50' cy='50' r='14' fill='none' stroke='%233b82f6' stroke-width='2' stroke-opacity='0.7'/><circle cx='50' cy='50' r='5' fill='%2360a5fa'/><path d='M50 50 L85 20' stroke='%2338bdf8' stroke-width='3' stroke-linecap='round'/></svg>">
+    <title>Scraper Légende — Plateforme de Veille SaaS & Détection d'Opportunités</title>
     
-    <!-- Polices Modernes -->
+    <!-- Favicon SVG Radar Haute Définition -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%233b82f6'/><stop offset='100%25' stop-color='%238b5cf6'/></linearGradient></defs><circle cx='16' cy='16' r='14' fill='%23070a13' stroke='url(%23g)' stroke-width='2'/><circle cx='16' cy='16' r='9' fill='none' stroke='%233b82f6' stroke-width='1.5' stroke-opacity='0.4'/><circle cx='16' cy='16' r='4' fill='%2360a5fa'/><line x1='16' y1='16' x2='26' y2='8' stroke='%2338bdf8' stroke-width='2' stroke-linecap='round'/></svg>">
+    
+    <!-- Google Fonts Premium : Plus Jakarta Sans & JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --bg-base: #07090e;
-            --bg-surface: #0e131f;
-            --bg-card: #131a2b;
-            --bg-card-hover: #192238;
-            --border-subtle: rgba(255, 255, 255, 0.08);
-            --border-highlight: #3b82f6;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --text-faint: #64748b;
+            /* Système de Couleurs Obsidian & Cyberpunk Professionnel */
+            --bg-base: #05070c;
+            --bg-surface: rgba(12, 17, 29, 0.75);
+            --bg-surface-elevated: rgba(18, 24, 41, 0.85);
+            --bg-card: rgba(15, 21, 37, 0.65);
+            --bg-card-hover: rgba(22, 31, 54, 0.9);
             
-            /* Accents & Tranches de Score */
+            --border-subtle: rgba(255, 255, 255, 0.07);
+            --border-medium: rgba(255, 255, 255, 0.12);
+            --border-focus: rgba(96, 165, 250, 0.5);
+            
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-tertiary: #64748b;
+            
+            /* Gradients & Accents */
             --accent-hot: #f43f5e;
-            --accent-hot-bg: rgba(244, 63, 94, 0.12);
-            --accent-hot-border: rgba(244, 63, 94, 0.35);
-            
+            --accent-hot-gradient: linear-gradient(135deg, #f43f5e, #fb7185);
             --accent-qual: #f59e0b;
-            --accent-qual-bg: rgba(245, 158, 11, 0.12);
-            --accent-qual-border: rgba(245, 158, 11, 0.35);
-            
+            --accent-qual-gradient: linear-gradient(135deg, #f59e0b, #fbbf24);
             --accent-cold: #64748b;
-            --accent-cold-bg: rgba(100, 116, 139, 0.12);
-            --accent-cold-border: rgba(100, 116, 139, 0.35);
             
-            --accent-emerald: #10b981;
-            --accent-purple: #a855f7;
-            --accent-blue: #3b82f6;
             --accent-cyan: #06b6d4;
+            --accent-blue: #3b82f6;
+            --accent-indigo: #6366f1;
+            --accent-purple: #a855f7;
+            --accent-emerald: #10b981;
+            
+            --brand-gradient: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
             
             --radius-sm: 8px;
-            --radius-md: 12px;
-            --radius-lg: 18px;
-            --shadow-subtle: 0 10px 30px -10px rgba(0, 0, 0, 0.6);
-            --shadow-glow: 0 0 25px rgba(59, 130, 246, 0.15);
+            --radius-md: 14px;
+            --radius-lg: 20px;
+            --radius-full: 9999px;
+            
+            --shadow-card: 0 10px 30px -10px rgba(0, 0, 0, 0.7);
+            --shadow-glow-blue: 0 0 25px rgba(59, 130, 246, 0.15);
+            --shadow-glow-purple: 0 0 25px rgba(168, 85, 247, 0.15);
         }
 
         * {
@@ -58,411 +64,537 @@
         body {
             background-color: var(--bg-base);
             background-image: 
-                radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.08) 0px, transparent 50%),
-                radial-gradient(at 100% 100%, rgba(168, 85, 247, 0.06) 0px, transparent 50%);
-            color: var(--text-main);
+                radial-gradient(circle at 15% 10%, rgba(59, 130, 246, 0.07) 0%, transparent 45%),
+                radial-gradient(circle at 85% 20%, rgba(168, 85, 247, 0.06) 0%, transparent 50%),
+                radial-gradient(circle at 50% 80%, rgba(6, 182, 212, 0.04) 0%, transparent 60%),
+                linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+            color: var(--text-primary);
             font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
             min-height: 100vh;
-            padding: 2.2rem 3rem;
-            line-height: 1.5;
+            padding: 2rem 3rem 4rem;
+            line-height: 1.6;
             letter-spacing: -0.01em;
+            -webkit-font-smoothing: antialiased;
         }
 
         .container {
-            max-width: 1440px;
+            max-width: 1480px;
             margin: 0 auto;
         }
 
-        /* En-tête Premium */
+        /* SVG Icons Inline Helper */
+        .icon {
+            display: inline-block;
+            width: 1em;
+            height: 1em;
+            stroke-width: 0;
+            stroke: currentColor;
+            fill: currentColor;
+            vertical-align: middle;
+        }
+
+        /* ==========================================================================
+           1. HEADER & BARRE DE NAVIGATION ULTRA-PREMIUM
+           ========================================================================== */
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 2rem;
-            padding-bottom: 1.5rem;
+            margin-bottom: 2.2rem;
+            padding-bottom: 1.6rem;
             border-bottom: 1px solid var(--border-subtle);
         }
 
-        .brand-box {
+        .brand-section {
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 1.1rem;
         }
 
-        .brand-logo-icon {
-            width: 46px;
-            height: 46px;
-            background: linear-gradient(135deg, #2563eb, #7c3aed);
+        .brand-icon-wrapper {
+            width: 52px;
+            height: 52px;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.2), rgba(124, 58, 237, 0.2));
+            border: 1px solid rgba(96, 165, 250, 0.3);
             border-radius: var(--radius-md);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.4rem;
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+            box-shadow: 0 0 25px rgba(59, 130, 246, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            position: relative;
         }
 
-        .brand-title {
-            font-size: 1.7rem;
+        .brand-icon-wrapper svg {
+            width: 28px;
+            height: 28px;
+            filter: drop-shadow(0 0 8px #60a5fa);
+        }
+
+        .brand-title-group h1 {
+            font-size: 1.85rem;
             font-weight: 800;
-            background: linear-gradient(135deg, #ffffff 30%, #93c5fd 100%);
+            background: var(--brand-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            letter-spacing: -0.03em;
+            letter-spacing: -0.035em;
+            line-height: 1.2;
         }
 
-        .brand-subtitle {
-            color: var(--text-muted);
+        .brand-tagline {
             font-size: 0.88rem;
-            margin-top: 0.15rem;
+            color: var(--text-secondary);
+            font-weight: 500;
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
 
-        .header-actions {
+        .header-badges {
             display: flex;
+            align-items: center;
+            gap: 0.85rem;
+        }
+
+        .badge-live-pulse {
+            background: rgba(16, 185, 129, 0.1);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 0.35rem 0.9rem;
+            border-radius: var(--radius-full);
+            font-size: 0.78rem;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #10b981;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #10b981;
+            animation: pulseAnimation 2s infinite;
+        }
+
+        @keyframes pulseAnimation {
+            0% { transform: scale(0.95); opacity: 1; }
+            50% { transform: scale(1.3); opacity: 0.5; }
+            100% { transform: scale(0.95); opacity: 1; }
+        }
+
+        .badge-pending-policy {
+            background: rgba(245, 158, 11, 0.08);
+            color: #fbbf24;
+            border: 1px solid rgba(245, 158, 11, 0.25);
+            padding: 0.35rem 0.85rem;
+            border-radius: var(--radius-full);
+            font-size: 0.78rem;
+            font-weight: 600;
+        }
+
+        /* ==========================================================================
+           2. EXECUTIVE KPI CARDS HERO STRIP (5 COLONNES COMPACTES)
+           ========================================================================== */
+        .kpi-suite {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1.15rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 1200px) {
+            .kpi-suite { grid-template-columns: repeat(3, 1fr); }
+        }
+        @media (max-width: 768px) {
+            .kpi-suite { grid-template-columns: 1fr 1fr; }
+        }
+
+        .kpi-card {
+            background: var(--bg-surface);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 1.25rem 1.4rem;
+            box-shadow: var(--shadow-card);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--border-medium);
+            background: var(--bg-surface-elevated);
+            box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.8);
+        }
+
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: var(--kpi-glow, rgba(255, 255, 255, 0.1));
+        }
+
+        .kpi-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.6rem;
+        }
+
+        .kpi-label {
+            font-size: 0.76rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-secondary);
+        }
+
+        .kpi-icon-box {
+            width: 32px;
+            height: 32px;
+            border-radius: var(--radius-sm);
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-subtle);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--kpi-icon-color, #94a3b8);
+        }
+
+        .kpi-value {
+            font-size: 2.1rem;
+            font-weight: 800;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-primary);
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+        }
+
+        .kpi-meta {
+            font-size: 0.76rem;
+            color: var(--text-tertiary);
+            margin-top: 0.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        /* ==========================================================================
+           3. DECK DE FILTRES & CONTRÔLE DE RECHERCHE
+           ========================================================================== */
+        .control-deck {
+            background: var(--bg-surface);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-card);
+        }
+
+        .filter-grid {
+            display: grid;
+            grid-template-columns: 2.2fr 1.1fr 1.2fr 1.1fr 1.1fr 1.2fr auto;
             gap: 0.85rem;
             align-items: center;
         }
 
-        .badge-pill {
-            padding: 0.35rem 0.85rem;
-            border-radius: 999px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            font-family: 'JetBrains Mono', monospace;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            border: 1px solid var(--border-subtle);
+        @media (max-width: 1300px) {
+            .filter-grid { grid-template-columns: 1fr 1fr 1fr; }
+        }
+        @media (max-width: 768px) {
+            .filter-grid { grid-template-columns: 1fr; }
         }
 
-        .badge-live {
-            background: rgba(16, 185, 129, 0.1);
-            color: #34d399;
-            border-color: rgba(16, 185, 129, 0.3);
-        }
-
-        .badge-live::before {
-            content: '';
-            width: 7px;
-            height: 7px;
-            background: #10b981;
-            border-radius: 50%;
-            display: inline-block;
-            box-shadow: 0 0 8px #10b981;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
-        }
-
-        .badge-policy {
-            background: rgba(245, 158, 11, 0.1);
-            color: #fbbf24;
-            border-color: rgba(245, 158, 11, 0.25);
-        }
-
-        /* Bandeau KPIs Compact et Lisible sans Scroll */
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 1.1rem;
-            margin-bottom: 2rem;
-        }
-
-        @media (max-width: 1100px) {
-            .metrics-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-        @media (max-width: 640px) {
-            .metrics-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-
-        .metric-card {
-            background: var(--bg-surface);
-            border: 1px solid var(--border-subtle);
-            border-radius: var(--radius-md);
-            padding: 1.1rem 1.3rem;
-            box-shadow: var(--shadow-subtle);
+        .search-input-wrapper {
             position: relative;
-            overflow: hidden;
-            transition: transform 0.2s, border-color 0.2s;
-        }
-
-        .metric-card:hover {
-            transform: translateY(-2px);
-            border-color: rgba(255, 255, 255, 0.16);
-        }
-
-        .metric-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 2px;
-            background: var(--card-accent, rgba(255, 255, 255, 0.1));
-        }
-
-        .metric-label {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-            color: var(--text-muted);
-            font-weight: 700;
-            margin-bottom: 0.35rem;
             display: flex;
             align-items: center;
-            justify-content: space-between;
         }
 
-        .metric-value {
-            font-size: 1.95rem;
-            font-weight: 800;
-            color: var(--text-main);
-            font-family: 'JetBrains Mono', monospace;
-            line-height: 1.1;
+        .search-icon {
+            position: absolute;
+            left: 0.9rem;
+            color: var(--text-tertiary);
+            pointer-events: none;
+            width: 16px;
+            height: 16px;
         }
 
-        .metric-sub {
-            font-size: 0.75rem;
-            color: var(--text-faint);
-            margin-top: 0.25rem;
-        }
-
-        /* Barre de Contrôles & Filtres */
-        .controls-card {
-            background: var(--bg-surface);
-            border: 1px solid var(--border-subtle);
-            border-radius: var(--radius-md);
-            padding: 1.15rem 1.4rem;
-            margin-bottom: 2rem;
-            box-shadow: var(--shadow-subtle);
-        }
-
-        .filters-form {
-            display: grid;
-            grid-template-columns: 2fr 1.1fr 1.2fr 1.1fr 1.1fr 1.2fr auto;
-            gap: 0.75rem;
-            align-items: center;
-        }
-
-        @media (max-width: 1200px) {
-            .filters-form {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-        @media (max-width: 640px) {
-            .filters-form {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        input[type="text"], select {
+        .search-input {
             width: 100%;
             background: var(--bg-base);
             border: 1px solid var(--border-subtle);
-            color: var(--text-main);
-            padding: 0.65rem 0.85rem;
+            color: var(--text-primary);
+            padding: 0.72rem 1rem 0.72rem 2.4rem;
             border-radius: var(--radius-sm);
-            font-size: 0.86rem;
+            font-size: 0.88rem;
             font-family: inherit;
             outline: none;
             transition: all 0.2s ease;
         }
 
-        input[type="text"]:focus, select:focus {
-            border-color: var(--border-highlight);
+        .search-input:focus {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+            background: rgba(10, 15, 26, 0.9);
+        }
+
+        .custom-select {
+            width: 100%;
+            background: var(--bg-base);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-primary);
+            padding: 0.72rem 0.9rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.88rem;
+            font-family: inherit;
+            outline: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .custom-select:focus {
+            border-color: var(--accent-blue);
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
         }
 
-        select option {
-            background: var(--bg-surface);
-            color: var(--text-main);
+        .btn-submit-filter {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            padding: 0.72rem 1.3rem;
+            border-radius: var(--radius-sm);
+            font-weight: 700;
+            font-size: 0.88rem;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
         }
 
-        .btn {
+        .btn-submit-filter:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5);
+            background: #1d4ed8;
+        }
+
+        .btn-reset-filter {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-subtle);
+            padding: 0.72rem 0.9rem;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            text-decoration: none;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: 0.65rem 1.1rem;
-            border-radius: var(--radius-sm);
-            font-size: 0.86rem;
-            font-weight: 700;
-            cursor: pointer;
-            border: none;
             transition: all 0.2s ease;
-            text-decoration: none;
-            gap: 0.4rem;
-            font-family: inherit;
         }
 
-        .btn-primary {
-            background: linear-gradient(135deg, #2563eb, #1d4ed8);
-            color: white;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        .btn-reset-filter:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            border-color: var(--border-medium);
         }
 
-        .btn-primary:hover {
-            background: #1e40af;
-            transform: translateY(-1px);
-        }
-
-        .btn-accent {
-            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
-            color: white;
-            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
-        }
-
-        .btn-accent:hover {
-            opacity: 0.95;
-            transform: translateY(-1px);
-        }
-
-        .btn-ghost {
-            background: rgba(255, 255, 255, 0.04);
-            color: var(--text-muted);
-            border: 1px solid var(--border-subtle);
-        }
-
-        .btn-ghost:hover {
-            background: rgba(255, 255, 255, 0.08);
-            color: var(--text-main);
-            border-color: rgba(255, 255, 255, 0.16);
-        }
-
-        /* Liste des Cartes d'Opportunités */
-        .items-header {
+        /* ==========================================================================
+           4. LISTE & CARTES D'OPPORTUNITÉS (LUXURY FEED)
+           ========================================================================== */
+        .feed-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 1.25rem;
         }
 
-        .items-count {
-            color: var(--text-muted);
-            font-size: 0.92rem;
-            font-weight: 500;
+        .feed-count {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            font-weight: 600;
         }
 
-        .items-grid {
+        .feed-count strong {
+            color: var(--text-primary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .opportunities-feed {
             display: grid;
-            gap: 1.1rem;
-        }
-
-        .item-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-subtle);
-            border-radius: var(--radius-md);
-            padding: 1.35rem 1.6rem;
-            transition: all 0.2s ease;
-            display: flex;
-            flex-direction: column;
-            gap: 0.85rem;
-            position: relative;
-        }
-
-        .item-card:hover {
-            border-color: rgba(96, 165, 250, 0.4);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
-        }
-
-        .item-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
             gap: 1.25rem;
         }
 
-        .item-title-link {
-            color: var(--text-main);
-            font-size: 1.15rem;
+        .opp-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 1.5rem 1.8rem;
+            box-shadow: var(--shadow-card);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            flex-direction: column;
+            gap: 0.95rem;
+            position: relative;
+        }
+
+        .opp-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(96, 165, 250, 0.35);
+            background: var(--bg-card-hover);
+            box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.8), var(--shadow-glow-blue);
+        }
+
+        .opp-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1.5rem;
+        }
+
+        .opp-title-link {
+            color: var(--text-primary);
+            font-size: 1.22rem;
             font-weight: 700;
             text-decoration: none;
-            line-height: 1.4;
+            line-height: 1.35;
+            letter-spacing: -0.02em;
+            display: inline-flex;
+            align-items: baseline;
+            gap: 0.4rem;
             transition: color 0.15s;
         }
 
-        .item-title-link:hover {
+        .opp-title-link:hover {
             color: #60a5fa;
         }
 
-        /* Score Pills avec Cohérence Visuelle */
-        .score-pill {
-            padding: 0.35rem 0.85rem;
-            border-radius: 999px;
-            font-size: 0.86rem;
+        .opp-external-icon {
+            width: 14px;
+            height: 14px;
+            color: var(--text-tertiary);
+            flex-shrink: 0;
+        }
+
+        /* Score Pills Sculptées */
+        .score-badge {
+            padding: 0.4rem 0.95rem;
+            border-radius: var(--radius-full);
+            font-size: 0.92rem;
             font-weight: 800;
             font-family: 'JetBrains Mono', monospace;
             white-space: nowrap;
             display: inline-flex;
             align-items: center;
-            gap: 0.35rem;
-            letter-spacing: -0.02em;
+            gap: 0.45rem;
+            letter-spacing: -0.03em;
+            flex-shrink: 0;
         }
 
-        .score-pill.tier-hot {
-            background: var(--accent-hot-bg);
+        .score-hot {
+            background: rgba(244, 63, 94, 0.12);
             color: #fb7185;
-            border: 1px solid var(--accent-hot-border);
-            box-shadow: 0 0 12px rgba(244, 63, 94, 0.2);
+            border: 1px solid rgba(244, 63, 94, 0.4);
+            box-shadow: 0 0 15px rgba(244, 63, 94, 0.25);
         }
 
-        .score-pill.tier-qual {
-            background: var(--accent-qual-bg);
+        .score-qual {
+            background: rgba(245, 158, 11, 0.12);
             color: #fbbf24;
-            border: 1px solid var(--accent-qual-border);
+            border: 1px solid rgba(245, 158, 11, 0.4);
+            box-shadow: 0 0 12px rgba(245, 158, 11, 0.15);
         }
 
-        .score-pill.tier-cold {
-            background: var(--accent-cold-bg);
+        .score-cold {
+            background: rgba(100, 116, 139, 0.12);
             color: #94a3b8;
-            border: 1px solid var(--accent-cold-border);
+            border: 1px solid rgba(100, 116, 139, 0.3);
         }
 
-        /* Badges de Sources Personnalisés */
-        .item-meta {
+        /* Badges de Métadonnées & Sources Distinctives */
+        .meta-strip {
             display: flex;
             flex-wrap: wrap;
-            gap: 0.55rem;
+            gap: 0.6rem;
             align-items: center;
         }
 
-        .tag {
-            font-size: 0.72rem;
+        .source-pill {
+            font-size: 0.74rem;
             font-weight: 700;
-            padding: 0.25rem 0.65rem;
-            border-radius: 6px;
+            padding: 0.28rem 0.7rem;
+            border-radius: var(--radius-sm);
             text-transform: uppercase;
-            letter-spacing: 0.04em;
+            letter-spacing: 0.05em;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .src-hackernews { background: rgba(249, 115, 22, 0.14); color: #fb923c; border: 1px solid rgba(249, 115, 22, 0.35); }
+        .src-producthunt { background: rgba(234, 88, 12, 0.14); color: #fb923c; border: 1px solid rgba(234, 88, 12, 0.35); }
+        .src-github { background: rgba(148, 163, 184, 0.14); color: #f8fafc; border: 1px solid rgba(148, 163, 184, 0.35); }
+        .src-stackexchange { background: rgba(234, 179, 8, 0.14); color: #facc15; border: 1px solid rgba(234, 179, 8, 0.35); }
+        .src-appsumo { background: rgba(16, 185, 129, 0.14); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.35); }
+        .src-wellfound { background: rgba(6, 182, 212, 0.14); color: #22d3ee; border: 1px solid rgba(6, 182, 212, 0.35); }
+        .src-betalist { background: rgba(236, 72, 153, 0.14); color: #f472b6; border: 1px solid rgba(236, 72, 153, 0.35); }
+
+        .signal-pill-showcase {
+            background: rgba(168, 85, 247, 0.14);
+            color: #c084fc;
+            border: 1px solid rgba(168, 85, 247, 0.35);
+        }
+
+        .signal-pill-pain {
+            background: rgba(244, 63, 94, 0.14);
+            color: #fb7185;
+            border: 1px solid rgba(244, 63, 94, 0.35);
+        }
+
+        .bc-status-pill {
+            background: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.45);
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.2);
+            font-size: 0.74rem;
+            font-weight: 700;
+            padding: 0.28rem 0.7rem;
+            border-radius: var(--radius-sm);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .metric-chip {
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-subtle);
+            font-size: 0.75rem;
+            padding: 0.22rem 0.6rem;
+            border-radius: var(--radius-sm);
+            font-family: 'JetBrains Mono', monospace;
             display: inline-flex;
             align-items: center;
             gap: 0.35rem;
         }
 
-        .tag-source-hn { background: rgba(249, 115, 22, 0.15); color: #fb923c; border: 1px solid rgba(249, 115, 22, 0.3); }
-        .tag-source-ph { background: rgba(234, 88, 12, 0.15); color: #fb923c; border: 1px solid rgba(234, 88, 12, 0.3); }
-        .tag-source-gh { background: rgba(148, 163, 184, 0.15); color: #f1f5f9; border: 1px solid rgba(148, 163, 184, 0.3); }
-        .tag-source-se { background: rgba(234, 179, 8, 0.15); color: #facc15; border: 1px solid rgba(234, 179, 8, 0.3); }
-        .tag-source-as { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
-        .tag-source-wf { background: rgba(6, 182, 212, 0.15); color: #22d3ee; border: 1px solid rgba(6, 182, 212, 0.3); }
-        .tag-source-bl { background: rgba(236, 72, 153, 0.15); color: #f472b6; border: 1px solid rgba(236, 72, 153, 0.3); }
-
-        .tag-signal-showcase { background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.3); }
-        .tag-signal-pain { background: rgba(244, 63, 94, 0.15); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.3); }
-        .tag-bc-ready { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); box-shadow: 0 0 10px rgba(16, 185, 129, 0.15); }
-        .tag-sub { background: rgba(255, 255, 255, 0.05); color: var(--text-muted); border: 1px solid var(--border-subtle); font-size: 0.72rem; padding: 0.18rem 0.5rem; border-radius: 4px; }
-
-        /* Description Tronquée & Voir Plus */
-        .item-description {
-            color: var(--text-muted);
-            font-size: 0.92rem;
-            line-height: 1.55;
+        /* Description Tronquée avec Contrôle Dynamique */
+        .opp-desc {
+            color: var(--text-secondary);
+            font-size: 0.94rem;
+            line-height: 1.6;
         }
 
         .desc-clamped {
@@ -472,320 +604,529 @@
             overflow: hidden;
         }
 
-        .btn-toggle-desc {
+        .btn-expand-desc {
             background: none;
             border: none;
             color: #60a5fa;
-            font-size: 0.78rem;
+            font-size: 0.8rem;
+            font-weight: 600;
             cursor: pointer;
             padding: 0;
-            margin-top: 0.3rem;
-            font-weight: 600;
+            margin-top: 0.35rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
         }
 
-        .btn-toggle-desc:hover {
+        .btn-expand-desc:hover {
             text-decoration: underline;
         }
 
-        .item-footer {
+        /* Footer de Carte */
+        .opp-footer {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 0.4rem;
-            padding-top: 0.85rem;
+            margin-top: 0.5rem;
+            padding-top: 1rem;
             border-top: 1px solid rgba(255, 255, 255, 0.05);
-            font-size: 0.82rem;
-            color: var(--text-faint);
+            font-size: 0.84rem;
+            color: var(--text-tertiary);
         }
 
-        .status-select {
-            width: auto;
-            padding: 0.3rem 0.7rem;
-            font-size: 0.8rem;
-            background: var(--bg-surface);
-            border: 1px solid var(--border-subtle);
-            border-radius: var(--radius-sm);
-            color: var(--text-main);
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        /* Modal Ultra-Premium */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(4, 7, 14, 0.82);
-            backdrop-filter: blur(10px);
-            z-index: 999;
-            align-items: center;
-            justify-content: center;
-            padding: 1.5rem;
-        }
-
-        .modal-card {
-            background: #0f1524;
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: var(--radius-lg);
-            max-width: 820px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-            padding: 2rem 2.2rem;
-            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.9), 0 0 30px rgba(59, 130, 246, 0.12);
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.25rem;
-        }
-
-        /* Bloc Business Case */
-        .bc-container {
-            background: rgba(168, 85, 247, 0.06);
-            border: 1px solid rgba(168, 85, 247, 0.3);
-            border-radius: var(--radius-md);
-            padding: 1.35rem;
-            margin-bottom: 1.35rem;
-        }
-
-        .bc-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.9rem;
-        }
-
-        .bc-card-box {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: var(--radius-sm);
-            padding: 0.85rem 1rem;
-            margin-bottom: 0.75rem;
-        }
-
-        .bc-title {
-            font-size: 0.78rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: #c084fc;
-            margin-bottom: 0.3rem;
+        .footer-date {
             display: flex;
             align-items: center;
             gap: 0.4rem;
         }
 
-        .bc-text {
-            font-size: 0.92rem;
-            color: var(--text-main);
-            line-height: 1.55;
+        .footer-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
         }
 
-        /* Bloc Breakdown Scoring */
-        .score-breakdown-box {
+        .btn-open-dossier {
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--text-primary);
+            border: 1px solid var(--border-medium);
+            padding: 0.38rem 0.95rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            transition: all 0.2s ease;
+        }
+
+        .btn-open-dossier:hover {
+            background: rgba(59, 130, 246, 0.15);
+            border-color: rgba(96, 165, 250, 0.5);
+            color: #93c5fd;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.2);
+        }
+
+        .status-dropdown {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            color: var(--text-primary);
+            padding: 0.38rem 0.75rem;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .status-dropdown:focus {
+            border-color: var(--accent-blue);
+        }
+
+        /* ==========================================================================
+           5. MODAL EXECUTIVE D'INSPECTION & BUSINESS CASE (HAUTE COUTURE)
+           ========================================================================== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(3, 6, 12, 0.88);
+            backdrop-filter: blur(14px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            animation: fadeIn 0.2s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-box {
+            background: #0d1322;
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: var(--radius-lg);
+            max-width: 860px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 2.2rem 2.5rem;
+            box-shadow: 0 25px 70px -15px rgba(0, 0, 0, 0.95), 0 0 40px rgba(59, 130, 246, 0.15);
+            animation: slideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+            gap: 1rem;
+        }
+
+        .modal-title-wrap h2 {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            line-height: 1.3;
+            margin-top: 0.35rem;
+        }
+
+        .modal-url-box {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border-subtle);
+            padding: 0.5rem 0.85rem;
+            border-radius: var(--radius-sm);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.82rem;
+            color: #93c5fd;
+        }
+
+        .modal-close-btn {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .modal-close-btn:hover {
+            background: rgba(255, 255, 255, 0.12);
+            color: var(--text-primary);
+        }
+
+        /* Dossier Business Case dans la Modal */
+        .modal-bc-hub {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.08), rgba(59, 130, 246, 0.05));
+            border: 1px solid rgba(168, 85, 247, 0.35);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .bc-hub-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.1rem;
+        }
+
+        .bc-hub-title {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: #c084fc;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-generate-action {
+            background: linear-gradient(135deg, #a855f7, #3b82f6);
+            color: white;
+            border: none;
+            padding: 0.45rem 1rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.35);
+            transition: all 0.2s ease;
+        }
+
+        .btn-generate-action:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(168, 85, 247, 0.5);
+            opacity: 0.95;
+        }
+
+        .bc-block-card {
+            background: rgba(10, 15, 26, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: var(--radius-sm);
+            padding: 1rem 1.2rem;
+            margin-bottom: 0.85rem;
+        }
+
+        .bc-block-card:last-child {
+            margin-bottom: 0;
+        }
+
+        .bc-block-header {
+            font-size: 0.78rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 0.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+        }
+
+        .bc-block-text {
+            font-size: 0.94rem;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* Hub de Décomposition de Scoring */
+        .scoring-breakdown-hub {
             background: var(--bg-base);
             border: 1px solid var(--border-subtle);
             border-radius: var(--radius-md);
-            padding: 1.25rem;
-            margin-bottom: 1.35rem;
+            padding: 1.4rem;
+            margin-bottom: 1.5rem;
         }
 
-        .breakdown-grid {
+        .scoring-hub-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .scoring-hub-title {
+            font-size: 0.98rem;
+            font-weight: 800;
+            color: #34d399;
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+        }
+
+        .scoring-dials-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 0.85rem;
-            margin-top: 0.9rem;
+            gap: 1rem;
         }
 
-        @media (max-width: 600px) {
-            .breakdown-grid {
-                grid-template-columns: 1fr 1fr;
-            }
+        @media (max-width: 640px) {
+            .scoring-dials-grid { grid-template-columns: 1fr 1fr; }
         }
 
-        .breakdown-item {
-            background: var(--bg-card);
-            padding: 0.75rem 0.9rem;
-            border-radius: var(--radius-sm);
+        .dial-box {
+            background: var(--bg-surface);
             border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            padding: 0.85rem 1rem;
         }
 
-        .breakdown-label {
-            font-size: 0.72rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
+        .dial-label {
+            font-size: 0.74rem;
+            color: var(--text-secondary);
             font-weight: 700;
+            text-transform: uppercase;
         }
 
-        .breakdown-val {
-            font-size: 1.2rem;
+        .dial-number {
+            font-size: 1.35rem;
             font-weight: 800;
             font-family: 'JetBrains Mono', monospace;
-            color: var(--text-main);
-            margin: 0.2rem 0;
+            color: var(--text-primary);
+            margin: 0.25rem 0 0.4rem;
         }
 
-        .breakdown-progress {
-            height: 4px;
+        .dial-bar-bg {
+            height: 5px;
             background: rgba(255, 255, 255, 0.08);
-            border-radius: 2px;
+            border-radius: var(--radius-full);
             overflow: hidden;
         }
 
-        .breakdown-bar {
+        .dial-bar-fill {
             height: 100%;
-            background: #3b82f6;
-            border-radius: 2px;
+            border-radius: var(--radius-full);
+            transition: width 0.4s ease;
         }
 
-        pre {
-            background: var(--bg-base);
+        /* Tiroir JSON Technique */
+        details.tech-drawer {
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            background: rgba(0, 0, 0, 0.25);
+            padding: 0.75rem 1rem;
+        }
+
+        details.tech-drawer summary {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        details.tech-drawer pre {
+            margin-top: 0.85rem;
+            background: #070a12;
             padding: 1rem;
             border-radius: var(--radius-sm);
             font-family: 'JetBrains Mono', monospace;
             font-size: 0.8rem;
-            overflow-x: auto;
             color: #93c5fd;
+            overflow-x: auto;
             border: 1px solid var(--border-subtle);
         }
 
-        .empty-state {
+        /* Empty State */
+        .empty-feed-state {
             text-align: center;
-            padding: 4.5rem 2rem;
+            padding: 5rem 2rem;
             background: var(--bg-surface);
-            border-radius: var(--radius-md);
             border: 1px dashed var(--border-subtle);
-            color: var(--text-muted);
+            border-radius: var(--radius-md);
+            color: var(--text-secondary);
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- En-tête Principal -->
+        
+        <!-- ==========================================
+             1. HEADER & BARRE DE NAVIGATION
+             ========================================== -->
         <header>
-            <div class="brand-box">
-                <div class="brand-logo-icon">📡</div>
-                <div>
-                    <h1 class="brand-title">Scraper Légende</h1>
-                    <p class="brand-subtitle">
-                        <span>Moteur de Veille Concurrentielle & Détection d'Opportunités SaaS</span>
-                    </p>
+            <div class="brand-section">
+                <div class="brand-icon-wrapper">
+                    <!-- SVG Radar Icon -->
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z" fill="#3b82f6" fill-opacity="0.2"/>
+                        <circle cx="12" cy="12" r="3" fill="#60a5fa"/>
+                        <path d="M12 12L19 5" stroke="#38bdf8" stroke-width="2.5"/>
+                    </svg>
+                </div>
+                <div class="brand-title-group">
+                    <h1>Scraper Légende</h1>
+                    <div class="brand-tagline">
+                        <span>Plateforme de Veille Concurrentielle SaaS & Scoring d'Opportunités</span>
+                    </div>
                 </div>
             </div>
-            <div class="header-actions">
-                <span class="badge-pill badge-live">7 Flux Actifs</span>
-                <span class="badge-pill badge-policy" title="En attente de validation Responsible Builder Policy 2026">Reddit : En attente API</span>
+
+            <div class="header-badges">
+                <div class="badge-live-pulse">
+                    <span class="pulse-dot"></span>
+                    <span>7 FLUX ACTIFS CONNECTÉS</span>
+                </div>
+                <div class="badge-pending-policy" title="En attente de validation Responsible Builder Policy 2026">
+                    <span>Reddit : En attente API</span>
+                </div>
             </div>
         </header>
 
-        <!-- KPI Hero Strip (5 Métriques Clés en Pleine Vue) -->
-        <div class="metrics-grid">
-            <div class="metric-card" style="--card-accent: #3b82f6;">
-                <div class="metric-label">
-                    <span>Total Opportunités</span>
-                    <span>🌐</span>
+        <!-- ==========================================
+             2. BANDEAU DES 5 KPIs STRATÉGIQUES
+             ========================================== -->
+        <section class="kpi-suite">
+            <!-- KPI 1 : Total -->
+            <div class="kpi-card" style="--kpi-glow: #3b82f6; --kpi-icon-color: #60a5fa;">
+                <div class="kpi-top">
+                    <span class="kpi-label">Total Opportunités</span>
+                    <div class="kpi-icon-box">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                    </div>
                 </div>
-                <div class="metric-value">{{ total_global }}</div>
-                <div class="metric-sub">7 sources actives connectées</div>
+                <div class="kpi-value">{{ total_global }}</div>
+                <div class="kpi-meta">7 sources actives consolidées</div>
             </div>
 
-            <div class="metric-card" style="--card-accent: #f43f5e;">
-                <div class="metric-label">
-                    <span style="color: #fb7185;">Chaudes (≥ 70)</span>
-                    <span>🔥</span>
+            <!-- KPI 2 : Chaudes -->
+            <div class="kpi-card" style="--kpi-glow: #f43f5e; --kpi-icon-color: #fb7185;">
+                <div class="kpi-top">
+                    <span class="kpi-label" style="color: #fb7185;">Chaudes (≥ 70 pts)</span>
+                    <div class="kpi-icon-box" style="background: rgba(244, 63, 94, 0.1); border-color: rgba(244, 63, 94, 0.3);">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#fb7185" stroke-width="2"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
+                    </div>
                 </div>
-                <div class="metric-value" style="color: #fb7185;">{{ nb_hot_score }}</div>
-                <div class="metric-sub">Priorité absolue / Business case</div>
+                <div class="kpi-value" style="color: #fb7185;">{{ nb_hot_score }}</div>
+                <div class="kpi-meta">Priorité absolue / Business case</div>
             </div>
 
-            <div class="metric-card" style="--card-accent: #f59e0b;">
-                <div class="metric-label">
-                    <span style="color: #fbbf24;">Qualifiées (50-69)</span>
-                    <span>💡</span>
+            <!-- KPI 3 : Qualifiées -->
+            <div class="kpi-card" style="--kpi-glow: #f59e0b; --kpi-icon-color: #fbbf24;">
+                <div class="kpi-top">
+                    <span class="kpi-label" style="color: #fbbf24;">Qualifiées (50-69)</span>
+                    <div class="kpi-icon-box" style="background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.3);">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>
+                    </div>
                 </div>
-                <div class="metric-value" style="color: #fbbf24;">{{ nb_qualified_score }}</div>
-                <div class="metric-sub">Signaux forts à approfondir</div>
+                <div class="kpi-value" style="color: #fbbf24;">{{ nb_qualified_score }}</div>
+                <div class="kpi-meta">Signaux forts à approfondir</div>
             </div>
 
-            <div class="metric-card" style="--card-accent: #64748b;">
-                <div class="metric-label">
-                    <span>En Veille (&lt; 50)</span>
-                    <span>👁️</span>
+            <!-- KPI 4 : Veille -->
+            <div class="kpi-card" style="--kpi-glow: #64748b; --kpi-icon-color: #94a3b8;">
+                <div class="kpi-top">
+                    <span class="kpi-label">En Veille (&lt; 50)</span>
+                    <div class="kpi-icon-box">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                    </div>
                 </div>
-                <div class="metric-value" style="color: #94a3b8;">{{ nb_cold_score }}</div>
-                <div class="metric-sub">Veille passive & signaux émergents</div>
+                <div class="kpi-value" style="color: #94a3b8;">{{ nb_cold_score }}</div>
+                <div class="kpi-meta">Veille passive & tendances</div>
             </div>
 
-            <div class="metric-card" style="--card-accent: #10b981;">
-                <div class="metric-label">
-                    <span style="color: #34d399;">Business Cases</span>
-                    <span>📄</span>
+            <!-- KPI 5 : Business Cases -->
+            <div class="kpi-card" style="--kpi-glow: #10b981; --kpi-icon-color: #34d399;">
+                <div class="kpi-top">
+                    <span class="kpi-label" style="color: #34d399;">Business Cases</span>
+                    <div class="kpi-icon-box" style="background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.3);">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                    </div>
                 </div>
-                <div class="metric-value" style="color: #34d399;">{{ nb_bc_generes }}</div>
-                <div class="metric-sub">Dossiers générés & prêts</div>
+                <div class="kpi-value" style="color: #34d399;">{{ nb_bc_generes }}</div>
+                <div class="kpi-meta">Dossiers structurés prêts</div>
             </div>
-        </div>
+        </section>
 
-        <!-- Filtres & Barre de Recherche Interactive -->
-        <div class="controls-card">
-            <form class="filters-form" method="get" action="/">
+        <!-- ==========================================
+             3. DECK DE FILTRES & CONTRÔLE INTERACTIF
+             ========================================== -->
+        <section class="control-deck">
+            <form class="filter-grid" method="get" action="/">
+                <!-- Barre de Recherche -->
+                <div class="search-input-wrapper">
+                    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <input type="text" name="q" class="search-input" placeholder="Rechercher par titre, mot-clé, tech..." value="{{ recherche }}">
+                </div>
+
+                <!-- Filtre Source -->
                 <div>
-                    <input type="text" name="q" placeholder="🔍 Rechercher (titre, mot-clé, tech...)" value="{{ recherche }}">
-                </div>
-
-                <div>
-                    <select name="source" onchange="this.form.submit()">
+                    <select name="source" class="custom-select" onchange="this.form.submit()">
                         <option value="">Toutes sources ({{ toutes_sources|length }})</option>
                         {% for src in toutes_sources %}
                         <option value="{{ src }}" {% if src == filtre_source %}selected{% endif %}>
-                            {% if src == 'hackernews' %}🟠 Hacker News
-                            {% elif src == 'producthunt' %}🚀 Product Hunt
-                            {% elif src == 'github' %}🐙 GitHub Trending
-                            {% elif src == 'stackexchange' %}⚡ Stack Exchange
-                            {% elif src == 'appsumo' %}🛍️ AppSumo Deals
-                            {% elif src == 'wellfound' %}🦄 Wellfound Startups
-                            {% elif src == 'betalist' %}🧪 BetaList
-                            {% elif src == 'reddit' %}⏳ Reddit (À venir)
+                            {% if src == 'hackernews' %}Hacker News
+                            {% elif src == 'producthunt' %}Product Hunt
+                            {% elif src == 'github' %}GitHub Trending
+                            {% elif src == 'stackexchange' %}Stack Exchange
+                            {% elif src == 'appsumo' %}AppSumo Deals
+                            {% elif src == 'wellfound' %}Wellfound Startups
+                            {% elif src == 'betalist' %}BetaList
+                            {% elif src == 'reddit' %}Reddit (À venir)
                             {% else %}{{ src|capitalize }}{% endif %}
                         </option>
                         {% endfor %}
                     </select>
                 </div>
 
+                <!-- Filtre Tranche de Score -->
                 <div>
-                    <select name="score_tier" onchange="this.form.submit()">
-                        <option value="">Tous les scores</option>
+                    <select name="score_tier" class="custom-select" onchange="this.form.submit()">
+                        <option value="">Tous les scores (0-100)</option>
                         <option value="hot" {% if filtre_score_tier == 'hot' %}selected{% endif %}>🔥 Chaudes (≥ 70 pts)</option>
                         <option value="qualified" {% if filtre_score_tier == 'qualified' %}selected{% endif %}>💡 Qualifiées (50-69 pts)</option>
                         <option value="cold" {% if filtre_score_tier == 'cold' %}selected{% endif %}>👁️ En Veille (&lt; 50 pts)</option>
                     </select>
                 </div>
 
+                <!-- Filtre Signal -->
                 <div>
-                    <select name="signal_type" onchange="this.form.submit()">
-                        <option value="">Tous les signaux</option>
-                        <option value="showcase" {% if filtre_signal == 'showcase' %}selected{% endif %}>🚀 Showcase / Produit</option>
-                        <option value="pain_point" {% if filtre_signal == 'pain_point' %}selected{% endif %}>💡 Pain Point / Besoin</option>
+                    <select name="signal_type" class="custom-select" onchange="this.form.submit()">
+                        <option value="">Tous signaux</option>
+                        <option value="showcase" {% if filtre_signal == 'showcase' %}selected{% endif %}>Showcase Produit</option>
+                        <option value="pain_point" {% if filtre_signal == 'pain_point' %}selected{% endif %}>Besoin Exprimé</option>
                     </select>
                 </div>
 
+                <!-- Filtre Statut -->
                 <div>
-                    <select name="status" onchange="this.form.submit()">
+                    <select name="status" class="custom-select" onchange="this.form.submit()">
                         <option value="">Tous statuts</option>
                         {% for st in tous_statuts %}
                         <option value="{{ st }}" {% if st == filtre_status %}selected{% endif %}>
-                            {% if st == 'business_case_genere' %}📄 Business Case Prêt
+                            {% if st == 'business_case_genere' %}Business Case Prêt
                             {% else %}{{ st|capitalize }}{% endif %}
                         </option>
                         {% endfor %}
                     </select>
                 </div>
 
+                <!-- Tri -->
                 <div>
-                    <select name="sort_by" onchange="this.form.submit()">
+                    <select name="sort_by" class="custom-select" onchange="this.form.submit()">
                         <option value="score_desc" {% if tri == 'score_desc' %}selected{% endif %}>Score : Décroissant</option>
                         <option value="score_asc" {% if tri == 'score_asc' %}selected{% endif %}>Score : Croissant</option>
                         <option value="date_desc" {% if tri == 'date_desc' %}selected{% endif %}>Date : Plus récents</option>
@@ -793,226 +1134,273 @@
                     </select>
                 </div>
 
+                <!-- Actions -->
                 <div style="display: flex; gap: 0.5rem;">
-                    <button type="submit" class="btn btn-primary">Filtrer</button>
+                    <button type="submit" class="btn-submit-filter">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+                        Filtrer
+                    </button>
                     {% if recherche or filtre_source or filtre_status or filtre_signal or filtre_score_tier %}
-                    <a href="/" class="btn btn-ghost" title="Réinitialiser les filtres">✕</a>
+                    <a href="/" class="btn-reset-filter" title="Réinitialiser les filtres">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    </a>
                     {% endif %}
                 </div>
             </form>
-        </div>
+        </section>
 
-        <!-- Liste des Résultats -->
-        <div class="items-header">
-            <span class="items-count">Affichage de <strong>{{ total }}</strong> opportunité(s) qualifiée(s)</span>
-        </div>
+        <!-- ==========================================
+             4. FEED DES OPPORTUNITÉS (LUXURY CARDS)
+             ========================================== -->
+        <section>
+            <div class="feed-header">
+                <span class="feed-count">Affichage de <strong>{{ total }}</strong> opportunité(s) qualifiée(s)</span>
+            </div>
 
-        {% if items %}
-        <div class="items-grid">
-            {% for item in items %}
-            <div class="item-card" id="item-{{ item.id }}">
-                <div class="item-top">
-                    <a href="{{ item.url }}" target="_blank" rel="noopener" class="item-title-link">
-                        {{ item.title }}
-                        <span style="font-size: 0.85rem; color: var(--text-faint); margin-left: 0.35rem;">↗</span>
-                    </a>
-                    
-                    {% set item_score = item.score|round(1) %}
-                    <span class="score-pill {% if item_score >= 70 %}tier-hot{% elif item_score >= 50 %}tier-qual{% else %}tier-cold{% endif %}">
-                        {% if item_score >= 70 %}🔥{% elif item_score >= 50 %}💡{% else %}👁️{% endif %}
-                        {{ item_score }} / 100
-                    </span>
-                </div>
-
-                <div class="item-meta">
-                    {% if item.source == 'hackernews' %}
-                    <span class="tag tag-source-hn">🟠 Hacker News</span>
-                    {% elif item.source == 'producthunt' %}
-                    <span class="tag tag-source-ph">🚀 Product Hunt</span>
-                    {% elif item.source == 'github' %}
-                    <span class="tag tag-source-gh">🐙 GitHub</span>
-                    {% elif item.source == 'stackexchange' %}
-                    <span class="tag tag-source-se">⚡ Stack Exchange</span>
-                    {% elif item.source == 'appsumo' %}
-                    <span class="tag tag-source-as">🛍️ AppSumo Deals</span>
-                    {% elif item.source == 'wellfound' %}
-                    <span class="tag tag-source-wf">🦄 Wellfound</span>
-                    {% elif item.source == 'betalist' %}
-                    <span class="tag tag-source-bl">🧪 BetaList</span>
-                    {% else %}
-                    <span class="tag tag-source-gh">{{ item.source }}</span>
-                    {% endif %}
-
-                    {% if item.signal_type == 'showcase' %}
-                    <span class="tag tag-signal-showcase">Showcase Produit</span>
-                    {% elif item.signal_type == 'pain_point' %}
-                    <span class="tag tag-signal-pain">Besoin Exprimé</span>
-                    {% endif %}
-
-                    {% if item.business_case %}
-                    <span class="tag tag-bc-ready">📄 Business Case Prêt</span>
-                    {% endif %}
-
-                    {% if item.raw_data %}
-                        {% if item.raw_data.points is defined %}
-                        <span style="font-size: 0.75rem; color: var(--text-muted); font-family: 'JetBrains Mono';">
-                            ▲ {{ item.raw_data.points }} pts · 💬 {{ item.raw_data.num_comments }} comms
-                        </span>
-                        {% elif item.raw_data.votes is defined %}
-                        <span style="font-size: 0.75rem; color: var(--text-muted); font-family: 'JetBrains Mono';">
-                            ▲ {{ item.raw_data.votes }} votes · 💬 {{ item.raw_data.comments }} comms
-                        </span>
-                        {% elif item.raw_data.stars_today is defined %}
-                        <span style="font-size: 0.75rem; color: var(--text-muted); font-family: 'JetBrains Mono';">
-                            ⭐ {{ item.raw_data.stars_today }} aujourd'hui [{{ item.raw_data.language }}]
-                        </span>
-                        {% elif item.raw_data.price is defined %}
-                        <span style="font-size: 0.75rem; color: #34d399; font-family: 'JetBrains Mono'; font-weight: 700;">
-                            💵 ${{ item.raw_data.price }} {% if item.raw_data.review_count %}(★ {{ item.raw_data.average_rating }} · {{ item.raw_data.review_count }} avis){% endif %}
-                        </span>
-                        {% elif item.raw_data.tags is defined %}
-                            {% for tg in item.raw_data.tags[:3] %}
-                            <span class="tag-sub">#{{ tg }}</span>
-                            {% endfor %}
-                        {% endif %}
-                    {% endif %}
-                </div>
-
-                {% if item.description %}
-                <div class="item-description">
-                    <span id="desc-text-{{ item.id }}" class="desc-clamped">{{ item.description }}</span>
-                    {% if item.description|length > 180 %}
-                    <button class="btn-toggle-desc" onclick="toggleDescription({{ item.id }})">Lire plus</button>
-                    {% endif %}
-                </div>
-                {% endif %}
-
-                <div class="item-footer">
-                    <span>Détecté le {{ item.detected_at.strftime('%d/%m/%Y à %H:%M') if item.detected_at else 'Récemment' }}</span>
-                    
-                    <div style="display: flex; align-items: center; gap: 0.75rem;">
-                        <button class="btn btn-ghost" style="padding: 0.3rem 0.75rem; font-size: 0.78rem;" onclick="viewRawDetails({{ item.id }})">
-                            🔍 Dossier & Scoring
-                        </button>
-                        <select class="status-select" onchange="updateItemStatus({{ item.id }}, this.value)">
-                            {% for st in tous_statuts %}
-                            <option value="{{ st }}" {% if st == item.status %}selected{% endif %}>
-                                {% if st == 'business_case_genere' %}Business Case Prêt
-                                {% else %}{{ st|capitalize }}{% endif %}
-                            </option>
-                            {% endfor %}
-                        </select>
+            {% if items %}
+            <div class="opportunities-feed">
+                {% for item in items %}
+                <article class="opp-card" id="item-{{ item.id }}">
+                    <!-- Top : Titre & Score Pill -->
+                    <div class="opp-top">
+                        <a href="{{ item.url }}" target="_blank" rel="noopener noreferrer" class="opp-title-link">
+                            <span>{{ item.title }}</span>
+                            <svg class="opp-external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                        </a>
+                        
+                        {% set item_score = item.score|round(1) %}
+                        <div class="score-badge {% if item_score >= 70 %}score-hot{% elif item_score >= 50 %}score-qual{% else %}score-cold{% endif %}">
+                            <span>{% if item_score >= 70 %}🔥{% elif item_score >= 50 %}💡{% else %}👁️{% endif %}</span>
+                            <span>{{ item_score }} / 100</span>
+                        </div>
                     </div>
+
+                    <!-- Meta Strip : Source, Signal, Business Case Status & Métriques Réelles -->
+                    <div class="meta-strip">
+                        <!-- Source -->
+                        {% if item.source == 'hackernews' %}
+                        <span class="source-pill src-hackernews">🟠 Hacker News</span>
+                        {% elif item.source == 'producthunt' %}
+                        <span class="source-pill src-producthunt">🚀 Product Hunt</span>
+                        {% elif item.source == 'github' %}
+                        <span class="source-pill src-github">🐙 GitHub</span>
+                        {% elif item.source == 'stackexchange' %}
+                        <span class="source-pill src-stackexchange">⚡ Stack Exchange</span>
+                        {% elif item.source == 'appsumo' %}
+                        <span class="source-pill src-appsumo">🛍️ AppSumo Deals</span>
+                        {% elif item.source == 'wellfound' %}
+                        <span class="source-pill src-wellfound">🦄 Wellfound</span>
+                        {% elif item.source == 'betalist' %}
+                        <span class="source-pill src-betalist">🧪 BetaList</span>
+                        {% else %}
+                        <span class="source-pill src-github">{{ item.source }}</span>
+                        {% endif %}
+
+                        <!-- Type de Signal -->
+                        {% if item.signal_type == 'showcase' %}
+                        <span class="source-pill signal-pill-showcase">Showcase Produit</span>
+                        {% elif item.signal_type == 'pain_point' %}
+                        <span class="source-pill signal-pill-pain">Besoin Exprimé</span>
+                        {% endif %}
+
+                        <!-- Business Case Ready -->
+                        {% if item.business_case %}
+                        <span class="bc-status-pill">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                            Business Case Prêt
+                        </span>
+                        {% endif %}
+
+                        <!-- Données Brutes Factuelles Réelles -->
+                        {% if item.raw_data %}
+                            {% if item.raw_data.points is defined %}
+                            <span class="metric-chip">▲ {{ item.raw_data.points }} pts · 💬 {{ item.raw_data.num_comments }} comms</span>
+                            {% elif item.raw_data.votes is defined %}
+                            <span class="metric-chip">▲ {{ item.raw_data.votes }} votes · 💬 {{ item.raw_data.comments }} comms</span>
+                            {% elif item.raw_data.stars_today is defined %}
+                            <span class="metric-chip">⭐ {{ item.raw_data.stars_today }} aujourd'hui [{{ item.raw_data.language }}]</span>
+                            {% elif item.raw_data.price is defined %}
+                            <span class="metric-chip" style="color: #34d399; font-weight: 700;">💵 ${{ item.raw_data.price }} {% if item.raw_data.review_count %}(★ {{ item.raw_data.average_rating }} · {{ item.raw_data.review_count }} avis){% endif %}</span>
+                            {% elif item.raw_data.tags is defined %}
+                                {% for tg in item.raw_data.tags[:3] %}
+                                <span class="metric-chip">#{{ tg }}</span>
+                                {% endfor %}
+                            {% endif %}
+                        {% endif %}
+                    </div>
+
+                    <!-- Description Textuelle avec Tronquage Épuré -->
+                    {% if item.description %}
+                    <div class="opp-desc">
+                        <div id="desc-text-{{ item.id }}" class="desc-clamped">{{ item.description }}</div>
+                        {% if item.description|length > 170 %}
+                        <button class="btn-expand-desc" onclick="toggleDescription({{ item.id }})">
+                            <span>Lire plus</span>
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                        </button>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+
+                    <!-- Footer de Carte avec Horodatage et Actions -->
+                    <div class="opp-footer">
+                        <div class="footer-date">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            <span>Détecté le {{ item.detected_at.strftime('%d/%m/%Y à %H:%M') if item.detected_at else 'Récemment' }}</span>
+                        </div>
+
+                        <div class="footer-actions">
+                            <button class="btn-open-dossier" onclick="viewRawDetails({{ item.id }})">
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                                Dossier & Business Case
+                            </button>
+
+                            <select class="status-dropdown" onchange="updateItemStatus({{ item.id }}, this.value)">
+                                {% for st in tous_statuts %}
+                                <option value="{{ st }}" {% if st == item.status %}selected{% endif %}>
+                                    {% if st == 'business_case_genere' %}Business Case Prêt
+                                    {% else %}{{ st|capitalize }}{% endif %}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-feed-state">
+                <h3 style="font-size: 1.3rem; color: var(--text-primary); margin-bottom: 0.5rem;">Aucune opportunité trouvée</h3>
+                <p>Aucun résultat ne correspond aux filtres actifs.</p>
+                <div style="margin-top: 1.25rem;">
+                    <a href="/" class="btn-submit-filter">Réinitialiser les filtres</a>
                 </div>
             </div>
-            {% endfor %}
-        </div>
-        {% else %}
-        <div class="empty-state">
-            <h3 style="margin-bottom: 0.5rem; color: var(--text-main); font-size: 1.2rem;">Aucune opportunité trouvée</h3>
-            <p>Aucun résultat ne correspond aux filtres sélectionnés.</p>
-            <p style="margin-top: 1rem;"><a href="/" class="btn btn-primary">Réinitialiser les filtres</a></p>
-        </div>
-        {% endif %}
+            {% endif %}
+        </section>
     </div>
 
-    <!-- Modal d'Inspection Ultra-Claire -->
+    <!-- ==========================================
+         5. MODAL EXECUTIVE D'INSPECTION & BUSINESS CASE
+         ========================================== -->
     <div class="modal-overlay" id="detailModal" onclick="closeModal(event)">
-        <div class="modal-card" onclick="event.stopPropagation()">
+        <div class="modal-box" onclick="event.stopPropagation()">
+            <!-- En-tête Modal -->
             <div class="modal-header">
-                <div>
-                    <span style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: #60a5fa;" id="modalSourceBadge">SOURCE</span>
-                    <h3 id="modalTitle" style="font-size: 1.25rem; color: var(--text-main); margin-top: 0.2rem;">Détails de l'opportunité</h3>
+                <div class="modal-title-wrap">
+                    <span id="modalSourceBadge" class="source-pill src-github">SOURCE</span>
+                    <h2 id="modalTitle">Titre de l'opportunité</h2>
                 </div>
-                <button class="btn btn-ghost" style="padding: 0.3rem 0.6rem;" onclick="closeModal()">✕</button>
-            </div>
-            
-            <div style="margin-bottom: 1.25rem;">
-                <p id="modalUrl" style="word-break: break-all; font-size: 0.85rem; font-family: 'JetBrains Mono';"></p>
+                <button class="modal-close-btn" onclick="closeModal()" title="Fermer la modal">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
             </div>
 
-            <!-- Section Business Case Structuré -->
-            <div class="bc-container" id="modalBcContainer">
-                <div class="bc-header">
-                    <span style="font-weight: 800; font-size: 0.95rem; color: #c084fc; display: flex; align-items: center; gap: 0.4rem;">
-                        <span>📄</span> Business Case Structuré
-                    </span>
-                    <button class="btn btn-accent" id="btnGenerateBc" style="padding: 0.3rem 0.8rem; font-size: 0.78rem;" onclick="generateCurrentBusinessCase()">
-                        ⚡ Générer Business Case
+            <!-- URL Box -->
+            <div class="modal-url-box">
+                <span id="modalUrl">https://...</span>
+                <span style="color: var(--text-tertiary);">ORIGINAL SOURCE ↗</span>
+            </div>
+
+            <!-- Section 1 : Dossier Business Case Structuré -->
+            <div class="modal-bc-hub">
+                <div class="bc-hub-top">
+                    <div class="bc-hub-title">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                        <span>Business Case Structuré</span>
+                    </div>
+                    <button class="btn-generate-action" id="btnGenerateBc" onclick="generateCurrentBusinessCase()">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                        <span>Générer Business Case</span>
                     </button>
                 </div>
+
                 <div id="bcContent" style="display: none;">
-                    <div class="bc-card-box">
-                        <div class="bc-title">📌 Problème Identifié</div>
-                        <div class="bc-text" id="bcProbleme"></div>
+                    <div class="bc-block-card">
+                        <div class="bc-block-header" style="color: #c084fc;">
+                            <span>📌</span> Problème Métier & Opportunité Détectée
+                        </div>
+                        <div class="bc-block-text" id="bcProbleme"></div>
                     </div>
-                    <div class="bc-card-box">
-                        <div class="bc-title">📈 Preuve de Traction & Métriques</div>
-                        <div class="bc-text" id="bcTraction"></div>
+
+                    <div class="bc-block-card">
+                        <div class="bc-block-header" style="color: #34d399;">
+                            <span>📈</span> Preuve de Traction & Métriques Réelles
+                        </div>
+                        <div class="bc-block-text" id="bcTraction"></div>
                     </div>
-                    <div class="bc-card-box">
-                        <div class="bc-title">💡 Angle Produit Suggéré</div>
-                        <div class="bc-text" id="bcAngle"></div>
+
+                    <div class="bc-block-card">
+                        <div class="bc-block-header" style="color: #38bdf8;">
+                            <span>💡</span> Angle Produit & Solution Recommandée
+                        </div>
+                        <div class="bc-block-text" id="bcAngle"></div>
                     </div>
                 </div>
-                <div id="bcPlaceholder" style="font-size: 0.88rem; color: var(--text-muted); padding: 0.5rem 0;">
+
+                <div id="bcPlaceholder" style="color: var(--text-secondary); font-size: 0.9rem; padding: 0.5rem 0;">
                     Aucun Business Case n'a encore été généré pour cette opportunité. Cliquez sur le bouton ci-dessus pour déclencher l'analyse automatisée.
                 </div>
             </div>
 
-            <!-- Décomposition Transparente du Scoring -->
-            <div class="score-breakdown-box" id="modalScoreBox">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span style="font-weight: 800; font-size: 0.92rem; color: #34d399; display: flex; align-items: center; gap: 0.4rem;">
-                        <span>📐</span> Décomposition du Score Multicritère
-                    </span>
-                    <span id="modalTotalScore" style="font-family: 'JetBrains Mono'; font-weight: 800; font-size: 1.15rem; color: #34d399;"></span>
+            <!-- Section 2 : Décomposition Analytique du Scoring -->
+            <div class="scoring-breakdown-hub">
+                <div class="scoring-hub-top">
+                    <div class="scoring-hub-title">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/></svg>
+                        <span>Décomposition Analytique du Score Multicritère</span>
+                    </div>
+                    <div id="modalTotalScore" style="font-family: 'JetBrains Mono'; font-weight: 800; font-size: 1.25rem; color: #34d399;"></div>
                 </div>
-                <div class="breakdown-grid">
-                    <div class="breakdown-item">
-                        <div class="breakdown-label">Engagement (40%)</div>
-                        <div class="breakdown-val" id="modalScoreEng">-</div>
-                        <div class="breakdown-progress"><div class="breakdown-bar" id="barEng" style="width: 0%;"></div></div>
+
+                <div class="scoring-dials-grid">
+                    <div class="dial-box">
+                        <div class="dial-label">Engagement (40%)</div>
+                        <div class="dial-number" id="modalScoreEng">-</div>
+                        <div class="dial-bar-bg"><div class="dial-bar-fill" id="barEng" style="width: 0%; background: #3b82f6;"></div></div>
                     </div>
-                    <div class="breakdown-item">
-                        <div class="breakdown-label">Fraîcheur (20%)</div>
-                        <div class="breakdown-val" id="modalScoreFresh">-</div>
-                        <div class="breakdown-progress"><div class="breakdown-bar" id="barFresh" style="width: 0%; background: #38bdf8;"></div></div>
+
+                    <div class="dial-box">
+                        <div class="dial-label">Fraîcheur (20%)</div>
+                        <div class="dial-number" id="modalScoreFresh">-</div>
+                        <div class="dial-bar-bg"><div class="dial-bar-fill" id="barFresh" style="width: 0%; background: #38bdf8;"></div></div>
                     </div>
-                    <div class="breakdown-item">
-                        <div class="breakdown-label">Signal (25%)</div>
-                        <div class="breakdown-val" id="modalScoreSig">-</div>
-                        <div class="breakdown-progress"><div class="breakdown-bar" id="barSig" style="width: 0%; background: #c084fc;"></div></div>
+
+                    <div class="dial-box">
+                        <div class="dial-label">Signal Métier (25%)</div>
+                        <div class="dial-number" id="modalScoreSig">-</div>
+                        <div class="dial-bar-bg"><div class="dial-bar-fill" id="barSig" style="width: 0%; background: #c084fc;"></div></div>
                     </div>
-                    <div class="breakdown-item">
-                        <div class="breakdown-label">Récurrence (15%)</div>
-                        <div class="breakdown-val" id="modalScoreRec">-</div>
-                        <div class="breakdown-progress"><div class="breakdown-bar" id="barRec" style="width: 0%; background: #facc15;"></div></div>
+
+                    <div class="dial-box">
+                        <div class="dial-label">Récurrence (15%)</div>
+                        <div class="dial-number" id="modalScoreRec">-</div>
+                        <div class="dial-bar-bg"><div class="dial-bar-fill" id="barRec" style="width: 0%; background: #facc15;"></div></div>
                     </div>
                 </div>
             </div>
 
-            <details style="margin-top: 1rem;">
-                <summary style="font-size: 0.8rem; color: var(--text-muted); cursor: pointer; text-transform: uppercase; font-weight: 700;">
-                    🔍 Données Brutes Complètes (JSON)
-                </summary>
-                <pre id="modalJson" style="margin-top: 0.6rem;"></pre>
+            <!-- Section 3 : Tiroir de Données Brutes Complètes (JSON) -->
+            <details class="tech-drawer">
+                <summary>Visualiser les Données Brutes Complètes (JSON)</summary>
+                <pre id="modalJson"></pre>
             </details>
         </div>
     </div>
 
+    <!-- Scripts JavaScript -->
     <script>
         let currentItemId = null;
 
         function toggleDescription(id) {
             const el = document.getElementById(`desc-text-${id}`);
-            const btn = event.target;
+            const btn = event.currentTarget;
             if (el.classList.contains("desc-clamped")) {
                 el.classList.remove("desc-clamped");
-                btn.innerText = "Réduire";
+                btn.innerHTML = '<span>Réduire</span><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"/></svg>';
             } else {
                 el.classList.add("desc-clamped");
-                btn.innerText = "Lire plus";
+                btn.innerHTML = '<span>Lire plus</span><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>';
             }
         }
 
@@ -1025,10 +1413,10 @@
                 });
                 const data = await response.json();
                 if (!data.success) {
-                    alert("Erreur mise à jour statut : " + (data.error || "Inconnu"));
+                    alert("Erreur lors de la mise à jour du statut : " + (data.error || "Inconnu"));
                 }
             } catch (err) {
-                console.error("Erreur mise à jour statut", err);
+                console.error("Erreur statut", err);
             }
         }
 
@@ -1043,12 +1431,16 @@
                 }
 
                 document.getElementById("modalTitle").innerText = data.title;
-                document.getElementById("modalSourceBadge").innerText = (data.source || "SIGNAL").toUpperCase();
-                document.getElementById("modalUrl").innerHTML = `<a href="${data.url}" target="_blank" style="color: #60a5fa; text-decoration: none;">${data.url} ↗</a>`;
+                
+                const srcBadge = document.getElementById("modalSourceBadge");
+                srcBadge.innerText = (data.source || "SIGNAL").toUpperCase();
+                srcBadge.className = `source-pill src-${(data.source || 'github').toLowerCase()}`;
+                
+                document.getElementById("modalUrl").innerHTML = `<a href="${data.url}" target="_blank" style="color: #60a5fa; text-decoration: none;">${data.url}</a>`;
                 
                 // Scoring
                 const bk = (data.raw_data && data.raw_data.scoring_breakdown) || {};
-                document.getElementById("modalTotalScore").innerText = `${data.score} / 100`;
+                document.getElementById("modalTotalScore").innerText = `Total : ${data.score} / 100`;
                 
                 const sEng = bk.engagement_score || 0;
                 const sFresh = bk.freshness_score || 0;
@@ -1086,18 +1478,18 @@
                 document.getElementById("bcAngle").innerText = bc.angle_produit_suggere;
                 content.style.display = "block";
                 placeholder.style.display = "none";
-                btn.innerText = "🔄 Régénérer";
+                btn.innerHTML = '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg><span>Régénérer Business Case</span>';
             } else {
                 content.style.display = "none";
                 placeholder.style.display = "block";
-                btn.innerText = "⚡ Générer Business Case";
+                btn.innerHTML = '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><span>Générer Business Case</span>';
             }
         }
 
         async function generateCurrentBusinessCase() {
             if (!currentItemId) return;
             const btn = document.getElementById("btnGenerateBc");
-            btn.innerText = "⏳ Analyse en cours...";
+            btn.innerHTML = '<span>⏳ Analyse en cours...</span>';
             btn.disabled = true;
 
             try {
