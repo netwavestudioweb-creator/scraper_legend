@@ -1,0 +1,171 @@
+import os
+import sys
+
+# Ajoute la racine du projet au path
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from flask import Flask, render_template, request, jsonify, redirect, url_for
+from db.database import get_session, init_db
+from db.models import Opportunity
+from config import PORT, DEBUG
+from core.scoring import recalculate_all_scores
+from core.business_case import generate_for_opportunity_id
+
+app = Flask(__name__)
+
+# Initialisation automatique des tables au démarrage
+try:
+    init_db()
+except Exception as e:
+    print(f"⚠️ Note init_db: {e}")
+
+
+@app.route("/")
+def index():
+    db = get_session()
+    try:
+        # Récupération des filtres
+        filtre_source = request.args.get("source", "").strip()
+        filtre_status = request.args.get("status", "").strip()
+        filtre_signal = request.args.get("signal_type", "").strip()
+        filtre_score_tier = request.args.get("score_tier", "").strip()
+        recherche = request.args.get("q", "").strip()
+        tri = request.args.get("sort_by", "score_desc").strip()
+
+        query = db.query(Opportunity)
+
+        # Application des filtres
+        if filtre_source:
+            query = query.filter(Opportunity.source == filtre_source)
+        if filtre_status:
+            query = query.filter(Opportunity.status == filtre_status)
+        if filtre_signal:
+            query = query.filter(Opportunity.signal_type == filtre_signal)
+        
+        # Filtre par tranche de score
+        if filtre_score_tier == "hot":
+            query = query.filter(Opportunity.score >= 70.0)
+        elif filtre_score_tier == "qualified":
+            query = query.filter(Opportunity.score >= 50.0, Opportunity.score < 70.0)
+        elif filtre_score_tier == "cold":
+            query = query.filter(Opportunity.score < 50.0)
+
+        if recherche:
+            terme = f"%{recherche}%"
+            query = query.filter((Opportunity.title.ilike(terme)) | (Opportunity.description.ilike(terme)))
+
+        # Tri
+        if tri == "score_desc":
+            query = query.order_by(Opportunity.score.desc(), Opportunity.detected_at.desc())
+        elif tri == "score_asc":
+            query = query.order_by(Opportunity.score.asc(), Opportunity.detected_at.desc())
+        elif tri == "date_asc":
+            query = query.order_by(Opportunity.detected_at.asc())
+        else:  # date_desc par défaut
+            query = query.order_by(Opportunity.detected_at.desc())
+
+        items = query.limit(100).all()
+
+        # Statistiques pour les widgets du dashboard
+        total_opportunites = db.query(Opportunity).count()
+        nb_nouveaux = db.query(Opportunity).filter(Opportunity.status == "nouveau").count()
+        nb_qualifies = db.query(Opportunity).filter(Opportunity.status == "qualifie").count()
+        nb_bc_generes = db.query(Opportunity).filter(Opportunity.business_case.isnot(None)).count()
+        nb_hot_score = db.query(Opportunity).filter(Opportunity.score >= 70.0).count()
+        
+        # Sources et signaux disponibles pour les menus déroulants
+        toutes_sources = [s[0] for s in db.query(Opportunity.source).distinct().all() if s[0]]
+        tous_statuts = ["nouveau", "qualifie", "en_cours", "rejete", "business_case_genere"]
+        tous_signaux = [s[0] for s in db.query(Opportunity.signal_type).distinct().all() if s[0]]
+
+        return render_template(
+            "index.html",
+            items=items,
+            total=len(items),
+            total_global=total_opportunites,
+            nb_nouveaux=nb_nouveaux,
+            nb_qualifies=nb_qualifies,
+            nb_bc_generes=nb_bc_generes,
+            nb_hot_score=nb_hot_score,
+            toutes_sources=toutes_sources,
+            tous_statuts=tous_statuts,
+            tous_signaux=tous_signaux,
+            filtre_source=filtre_source,
+            filtre_status=filtre_status,
+            filtre_signal=filtre_signal,
+            filtre_score_tier=filtre_score_tier,
+            recherche=recherche,
+            tri=tri,
+        )
+    finally:
+        db.close()
+
+
+@app.route("/opportunity/<int:item_id>", methods=["GET"])
+def get_opportunity(item_id):
+    """API endpoint pour charger les détails d'une opportunité en modal."""
+    db = get_session()
+    try:
+        item = db.query(Opportunity).filter(Opportunity.id == item_id).first()
+        if not item:
+            return jsonify({"error": "Opportunité introuvable"}), 404
+        return jsonify(item.to_dict())
+    finally:
+        db.close()
+
+
+@app.route("/opportunity/<int:item_id>/status", methods=["POST"])
+def update_status(item_id):
+    """Mise à jour rapide du statut de traitement depuis l'interface."""
+    db = get_session()
+    try:
+        item = db.query(Opportunity).filter(Opportunity.id == item_id).first()
+        if not item:
+            return jsonify({"success": False, "error": "Opportunité introuvable"}), 404
+
+        nouveau_statut = request.form.get("status") or (request.json and request.json.get("status"))
+        if nouveau_statut:
+            item.status = nouveau_statut
+            db.commit()
+            return jsonify({"success": True, "new_status": item.status})
+        return jsonify({"success": False, "error": "Statut invalide"}), 400
+    except Exception as e:
+        db.rollback()
+        return jsonify({"success": False, "error": str(e)}), 500
+    finally:
+        db.close()
+
+
+@app.route("/opportunity/<int:item_id>/generate-business-case", methods=["POST"])
+def generate_single_business_case(item_id):
+    """Génère à la demande un Business Case pour une opportunité spécifique."""
+    try:
+        bc = generate_for_opportunity_id(item_id)
+        return jsonify({"success": True, "business_case": bc})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+
+@app.route("/api/recalculate-scores", methods=["POST"])
+def trigger_recalculate():
+    """Déclenche le recalcul des scores multicritères pour toutes les opportunités."""
+    try:
+        updated_count = recalculate_all_scores()
+        return jsonify({"success": True, "updated_count": updated_count})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+
+@app.route("/api/trigger-scrape", methods=["POST"])
+def trigger_scrape():
+    """Déclenche une collecte complète multi-sources avec scoring."""
+    from main import run_all
+    try:
+        run_all()
+        return jsonify({"success": True, "message": "Collecte et scoring exécutés avec succès."})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=PORT, debug=DEBUG)

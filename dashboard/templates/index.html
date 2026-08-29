@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scraper Légende — Veille Concurrentielle & Business Cases Automatisés</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-base: #0a0d14;
+            --bg-surface: #121722;
+            --bg-card: #181f2f;
+            --bg-card-hover: #1f283d;
+            --border-subtle: #242d40;
+            --border-highlight: #3b82f6;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --text-faint: #64748b;
+            --accent-primary: #3b82f6;
+            --accent-purple: #8b5cf6;
+            --accent-emerald: #10b981;
+            --accent-amber: #f59e0b;
+            --accent-rose: #f43f5e;
+            --radius-md: 10px;
+            --radius-lg: 14px;
+            --shadow-subtle: 0 4px 20px rgba(0, 0, 0, 0.35);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            padding: 2rem 2.5rem;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* En-tête */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .brand-title {
+            font-size: 1.6rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .brand-subtitle {
+            color: var(--text-muted);
+            font-size: 0.88rem;
+            margin-top: 0.2rem;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .badge-version {
+            background: rgba(59, 130, 246, 0.15);
+            color: #60a5fa;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            padding: 0.25rem 0.65rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .badge-pending {
+            background: rgba(245, 158, 11, 0.12);
+            color: #fbbf24;
+            border: 1px solid rgba(245, 158, 11, 0.25);
+            padding: 0.25rem 0.65rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        /* Cartes Métriques (KPIs) */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem 1.5rem;
+            box-shadow: var(--shadow-subtle);
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .metric-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .metric-value {
+            font-size: 1.9rem;
+            font-weight: 700;
+            color: var(--text-main);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Barre de Filtres & Recherche */
+        .controls-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .filters-form {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1.1fr 1fr 1fr auto;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        @media (max-width: 1200px) {
+            .filters-form {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .filters-form {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        input[type="text"], select {
+            width: 100%;
+            background: var(--bg-base);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-main);
+            padding: 0.65rem 0.9rem;
+            border-radius: var(--radius-md);
+            font-size: 0.88rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus, select:focus {
+            border-color: var(--border-highlight);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.65rem 1.25rem;
+            border-radius: var(--radius-md);
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--accent-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+
+        .btn-accent {
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            color: white;
+        }
+
+        .btn-accent:hover {
+            opacity: 0.9;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-muted);
+            border: 1px solid var(--border-subtle);
+        }
+
+        .btn-ghost:hover {
+            background: var(--bg-card);
+            color: var(--text-main);
+        }
+
+        /* Liste des Opportunités */
+        .items-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .items-count {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .items-grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .item-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem 1.5rem;
+            transition: transform 0.15s ease, border-color 0.15s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .item-card:hover {
+            border-color: #3b82f688;
+            transform: translateY(-2px);
+        }
+
+        .item-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .item-title-link {
+            color: var(--text-main);
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            line-height: 1.4;
+        }
+
+        .item-title-link:hover {
+            color: #60a5fa;
+        }
+
+        .score-pill {
+            padding: 0.3rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+            white-space: nowrap;
+        }
+
+        .score-pill.high {
+            background: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.35);
+        }
+
+        .score-pill.medium {
+            background: rgba(245, 158, 11, 0.15);
+            color: #fbbf24;
+            border: 1px solid rgba(245, 158, 11, 0.35);
+        }
+
+        .score-pill.low {
+            background: rgba(100, 116, 139, 0.15);
+            color: #94a3b8;
+            border: 1px solid rgba(100, 116, 139, 0.35);
+        }
+
+        .item-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .tag {
+            font-size: 0.72rem;
+            font-weight: 600;
+            padding: 0.2rem 0.55rem;
+            border-radius: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .tag-source {
+            background: rgba(59, 130, 246, 0.15);
+            color: #60a5fa;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .tag-source-ph {
+            background: rgba(234, 88, 12, 0.15);
+            color: #fb923c;
+            border: 1px solid rgba(234, 88, 12, 0.3);
+        }
+
+        .tag-source-gh {
+            background: rgba(148, 163, 184, 0.15);
+            color: #e2e8f0;
+            border: 1px solid rgba(148, 163, 184, 0.3);
+        }
+
+        .tag-source-se {
+            background: rgba(245, 158, 11, 0.15);
+            color: #fcd34d;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .tag-source-bl {
+            background: rgba(236, 72, 153, 0.15);
+            color: #f472b6;
+            border: 1px solid rgba(236, 72, 153, 0.3);
+        }
+
+        .tag-source-as {
+            background: rgba(234, 179, 8, 0.15);
+            color: #facc15;
+            border: 1px solid rgba(234, 179, 8, 0.3);
+        }
+
+        .tag-source-wf {
+            background: rgba(20, 184, 166, 0.15);
+            color: #2dd4bf;
+            border: 1px solid rgba(20, 184, 166, 0.3);
+        }
+
+        .tag-signal-showcase {
+            background: rgba(139, 92, 246, 0.15);
+            color: #c084fc;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+
+        .tag-signal-pain {
+            background: rgba(244, 63, 94, 0.15);
+            color: #fb7185;
+            border: 1px solid rgba(244, 63, 94, 0.3);
+        }
+
+        .tag-bc {
+            background: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .tag-sub {
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--text-muted);
+            border: 1px solid var(--border-subtle);
+            font-size: 0.7rem;
+            padding: 0.15rem 0.45rem;
+            border-radius: 4px;
+        }
+
+        .item-description {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .item-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.5rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.8rem;
+            color: var(--text-faint);
+        }
+
+        .status-select {
+            width: auto;
+            padding: 0.25rem 0.6rem;
+            font-size: 0.78rem;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: 6px;
+            color: var(--text-main);
+            cursor: pointer;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: var(--bg-surface);
+            border-radius: var(--radius-lg);
+            border: 1px dashed var(--border-subtle);
+            color: var(--text-muted);
+        }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(4px);
+            z-index: 999;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        .modal-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            max-width: 800px;
+            width: 100%;
+            max-height: 88vh;
+            overflow-y: auto;
+            padding: 1.75rem;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        /* Section Business Case */
+        .bc-container {
+            background: rgba(139, 92, 246, 0.06);
+            border: 1px solid rgba(139, 92, 246, 0.25);
+            border-radius: var(--radius-md);
+            padding: 1.25rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .bc-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .bc-section {
+            margin-top: 0.75rem;
+        }
+
+        .bc-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: #c084fc;
+            margin-bottom: 0.25rem;
+        }
+
+        .bc-text {
+            font-size: 0.9rem;
+            color: var(--text-main);
+            line-height: 1.5;
+        }
+
+        /* Section Scoring Breakdown */
+        .score-breakdown-box {
+            background: var(--bg-base);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .breakdown-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.75rem;
+            margin-top: 0.75rem;
+        }
+
+        @media (max-width: 600px) {
+            .breakdown-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .breakdown-item {
+            background: var(--bg-card);
+            padding: 0.6rem 0.8rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-subtle);
+        }
+
+        .breakdown-label {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .breakdown-val {
+            font-size: 1.1rem;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-main);
+        }
+
+        pre {
+            background: var(--bg-base);
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.82rem;
+            overflow-x: auto;
+            color: #93c5fd;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div>
+                <h1 class="brand-title">🚀 Scraper Légende</h1>
+                <p class="brand-subtitle">Moteur de Veille Concurrentielle & Génération de Business Cases</p>
+            </div>
+            <div class="header-actions">
+                <span class="badge-version">Phase 5 : Business Cases</span>
+                <span class="badge-pending" title="En attente de validation Responsible Builder Policy 2026">Reddit : En attente API</span>
+            </div>
+        </header>
+
+        <!-- KPI Cards -->
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <span class="metric-label">Total Opportunités</span>
+                <span class="metric-value">{{ total_global }}</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-label">Opportunités Chaudes (≥ 70)</span>
+                <span class="metric-value" style="color: #34d399;">{{ nb_hot_score }}</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-label">Business Cases Générés</span>
+                <span class="metric-value" style="color: #c084fc;">{{ nb_bc_generes }}</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-label">Sources Actives</span>
+                <span class="metric-value" style="color: #60a5fa;">{{ toutes_sources|length }}</span>
+            </div>
+        </div>
+
+        <!-- Filtres & Contrôles -->
+        <div class="controls-card">
+            <form class="filters-form" method="get" action="/">
+                <div>
+                    <input type="text" name="q" placeholder="Rechercher par mot-clé..." value="{{ recherche }}">
+                </div>
+
+                <div>
+                    <select name="source" onchange="this.form.submit()">
+                        <option value="">Toutes sources ({{ toutes_sources|length }})</option>
+                        {% for src in toutes_sources %}
+                        <option value="{{ src }}" {% if src == filtre_source %}selected{% endif %}>
+                            {% if src == 'hackernews' %}Hacker News
+                            {% elif src == 'producthunt' %}Product Hunt
+                            {% elif src == 'github' %}GitHub Trending
+                            {% elif src == 'stackexchange' %}Stack Exchange
+                            {% elif src == 'betalist' %}BetaList
+                            {% elif src == 'appsumo' %}AppSumo
+                            {% elif src == 'wellfound' %}Wellfound
+                            {% elif src == 'reddit' %}Reddit (À venir)
+                            {% else %}{{ src|capitalize }}{% endif %}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div>
+                    <select name="score_tier" onchange="this.form.submit()">
+                        <option value="">Tous les scores</option>
+                        <option value="hot" {% if filtre_score_tier == 'hot' %}selected{% endif %}>🔥 Score ≥ 70 (Chaudes)</option>
+                        <option value="qualified" {% if filtre_score_tier == 'qualified' %}selected{% endif %}>💡 Score 50-69 (Qualifiées)</option>
+                        <option value="cold" {% if filtre_score_tier == 'cold' %}selected{% endif %}>👁️ Score &lt; 50 (Veille)</option>
+                    </select>
+                </div>
+
+                <div>
+                    <select name="signal_type" onchange="this.form.submit()">
+                        <option value="">Tous les signaux</option>
+                        <option value="showcase" {% if filtre_signal == 'showcase' %}selected{% endif %}>Showcase / Lancement</option>
+                        <option value="pain_point" {% if filtre_signal == 'pain_point' %}selected{% endif %}>Pain Point / Besoin</option>
+                    </select>
+                </div>
+
+                <div>
+                    <select name="status" onchange="this.form.submit()">
+                        <option value="">Tous statuts</option>
+                        {% for st in tous_statuts %}
+                        <option value="{{ st }}" {% if st == filtre_status %}selected{% endif %}>
+                            {% if st == 'business_case_genere' %}📄 Business Case Généré
+                            {% else %}{{ st|capitalize }}{% endif %}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div>
+                    <select name="sort_by" onchange="this.form.submit()">
+                        <option value="score_desc" {% if tri == 'score_desc' %}selected{% endif %}>Score : Décroissant</option>
+                        <option value="score_asc" {% if tri == 'score_asc' %}selected{% endif %}>Score : Croissant</option>
+                        <option value="date_desc" {% if tri == 'date_desc' %}selected{% endif %}>Date : Plus récents</option>
+                        <option value="date_asc" {% if tri == 'date_asc' %}selected{% endif %}>Date : Plus anciens</option>
+                    </select>
+                </div>
+
+                <div style="display: flex; gap: 0.5rem;">
+                    <button type="submit" class="btn btn-primary">Filtrer</button>
+                    {% if recherche or filtre_source or filtre_status or filtre_signal or filtre_score_tier %}
+                    <a href="/" class="btn btn-ghost">Reset</a>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+
+        <!-- Liste des Résultats -->
+        <div class="items-header">
+            <span class="items-count">Affichage de <strong>{{ total }}</strong> opportunité(s)</span>
+        </div>
+
+        {% if items %}
+        <div class="items-grid">
+            {% for item in items %}
+            <div class="item-card" id="item-{{ item.id }}">
+                <div class="item-top">
+                    <a href="{{ item.url }}" target="_blank" rel="noopener" class="item-title-link">
+                        {{ item.title }}
+                        <span style="font-size: 0.8rem; color: var(--text-faint); margin-left: 0.3rem;">↗</span>
+                    </a>
+                    
+                    {% set item_score = item.score|round(1) %}
+                    <span class="score-pill {% if item_score >= 70 %}high{% elif item_score >= 50 %}medium{% else %}low{% endif %}">
+                        ★ {{ item_score }} / 100
+                    </span>
+                </div>
+
+                <div class="item-meta">
+                    {% if item.source == 'hackernews' %}
+                    <span class="tag tag-source">Hacker News</span>
+                    {% elif item.source == 'producthunt' %}
+                    <span class="tag tag-source-ph">Product Hunt</span>
+                    {% elif item.source == 'github' %}
+                    <span class="tag tag-source-gh">GitHub</span>
+                    {% elif item.source == 'stackexchange' %}
+                    <span class="tag tag-source-se">Stack Exchange</span>
+                    {% elif item.source == 'betalist' %}
+                    <span class="tag tag-source-bl">BetaList</span>
+                    {% elif item.source == 'appsumo' %}
+                    <span class="tag tag-source-as">AppSumo</span>
+                    {% elif item.source == 'wellfound' %}
+                    <span class="tag tag-source-wf">Wellfound</span>
+                    {% else %}
+                    <span class="tag tag-source">{{ item.source }}</span>
+                    {% endif %}
+
+                    {% if item.signal_type == 'showcase' %}
+                    <span class="tag tag-signal-showcase">🚀 Showcase / Produit</span>
+                    {% elif item.signal_type == 'pain_point' %}
+                    <span class="tag tag-signal-pain">💡 Besoin / Pain Point</span>
+                    {% else %}
+                    <span class="tag tag-source">{{ item.signal_type or 'Signal' }}</span>
+                    {% endif %}
+
+                    {% if item.business_case %}
+                    <span class="tag tag-bc">📄 Business Case Prêt</span>
+                    {% endif %}
+
+                    {% if item.raw_data %}
+                        {% if item.raw_data.points is defined %}
+                        <span style="font-size: 0.75rem; color: var(--text-muted); font-family: 'JetBrains Mono';">
+                            ▲ {{ item.raw_data.points }} pts · 💬 {{ item.raw_data.num_comments }} comms
+                        </span>
+                        {% elif item.raw_data.votes is defined %}
+                        <span style="font-size: 0.75rem; color: var(--text-muted); font-family: 'JetBrains Mono';">
+                            ▲ {{ item.raw_data.votes }} votes · 💬 {{ item.raw_data.comments }} comms
+                        </span>
+                        {% elif item.raw_data.stars_today is defined %}
+                        <span style="font-size: 0.75rem; color: var(--text-muted); font-family: 'JetBrains Mono';">
+                            ⭐ {{ item.raw_data.stars_today }} aujourd'hui [{{ item.raw_data.language }}]
+                        </span>
+                        {% elif item.raw_data.price is defined %}
+                        <span style="font-size: 0.75rem; color: #facc15; font-family: 'JetBrains Mono'; font-weight: 600;">
+                            💵 ${{ item.raw_data.price }} {% if item.raw_data.review_count %}(★ {{ item.raw_data.average_rating }} · {{ item.raw_data.review_count }} avis){% endif %}
+                        </span>
+                        {% elif item.raw_data.tags is defined %}
+                            {% for tg in item.raw_data.tags[:3] %}
+                            <span class="tag-sub">#{{ tg }}</span>
+                            {% endfor %}
+                        {% endif %}
+                    {% endif %}
+                </div>
+
+                {% if item.description %}
+                <div class="item-description">
+                    {{ item.description[:280] }}{% if item.description|length > 280 %}...{% endif %}
+                </div>
+                {% endif %}
+
+                <div class="item-footer">
+                    <span>Détecté le {{ item.detected_at.strftime('%d/%m/%Y à %H:%M') if item.detected_at else 'Récemment' }}</span>
+                    
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <button class="btn btn-ghost" style="padding: 0.25rem 0.6rem; font-size: 0.75rem;" onclick="viewRawDetails({{ item.id }})">
+                            🔍 Détail & Business Case
+                        </button>
+                        <select class="status-select" onchange="updateItemStatus({{ item.id }}, this.value)">
+                            {% for st in tous_statuts %}
+                            <option value="{{ st }}" {% if st == item.status %}selected{% endif %}>
+                                {% if st == 'business_case_genere' %}Business Case
+                                {% else %}{{ st|capitalize }}{% endif %}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <h3 style="margin-bottom: 0.5rem; color: var(--text-main);">Aucune opportunité trouvée</h3>
+            <p>Aucun résultat ne correspond aux filtres sélectionnés ou la base est vide.</p>
+            <p style="margin-top: 1rem; font-size: 0.85rem;">Exécutez <code>python main.py</code> pour déclencher une collecte de signaux.</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Modal d'inspection -->
+    <div class="modal-overlay" id="detailModal" onclick="closeModal(event)">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3 id="modalTitle" style="font-size: 1.15rem; color: var(--text-main);">Détails de l'opportunité</h3>
+                <button class="btn btn-ghost" style="padding: 0.2rem 0.5rem;" onclick="closeModal()">✕</button>
+            </div>
+            
+            <div style="margin-bottom: 1rem;">
+                <p id="modalUrl" style="color: #60a5fa; word-break: break-all; font-size: 0.85rem;"></p>
+            </div>
+
+            <!-- Section Business Case Structuré -->
+            <div class="bc-container" id="modalBcContainer">
+                <div class="bc-header">
+                    <span style="font-weight: 700; font-size: 0.92rem; color: #c084fc;">📄 Business Case Structuré</span>
+                    <button class="btn btn-accent" id="btnGenerateBc" style="padding: 0.25rem 0.65rem; font-size: 0.75rem;" onclick="generateCurrentBusinessCase()">
+                        ⚡ Générer Business Case
+                    </button>
+                </div>
+                <div id="bcContent" style="display: none;">
+                    <div class="bc-section">
+                        <div class="bc-title">📌 Problème Identifié</div>
+                        <div class="bc-text" id="bcProbleme"></div>
+                    </div>
+                    <div class="bc-section">
+                        <div class="bc-title">📈 Preuve de Traction & Métriques</div>
+                        <div class="bc-text" id="bcTraction"></div>
+                    </div>
+                    <div class="bc-section">
+                        <div class="bc-title">💡 Angle Produit Suggéré</div>
+                        <div class="bc-text" id="bcAngle"></div>
+                    </div>
+                </div>
+                <div id="bcPlaceholder" style="font-size: 0.85rem; color: var(--text-muted);">
+                    Aucun Business Case n'a encore été généré pour cette opportunité. Cliquez sur le bouton pour en générer un à la demande.
+                </div>
+            </div>
+
+            <!-- Décomposition du scoring -->
+            <div class="score-breakdown-box" id="modalScoreBox">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-weight: 700; font-size: 0.9rem; color: #34d399;">📐 Décomposition du Score Multicritère</span>
+                    <span id="modalTotalScore" style="font-family: 'JetBrains Mono'; font-weight: 700; font-size: 1.1rem; color: #34d399;"></span>
+                </div>
+                <div class="breakdown-grid">
+                    <div class="breakdown-item">
+                        <div class="breakdown-label">Engagement (40%)</div>
+                        <div class="breakdown-val" id="modalScoreEng">-</div>
+                    </div>
+                    <div class="breakdown-item">
+                        <div class="breakdown-label">Fraîcheur (20%)</div>
+                        <div class="breakdown-val" id="modalScoreFresh">-</div>
+                    </div>
+                    <div class="breakdown-item">
+                        <div class="breakdown-label">Signal (25%)</div>
+                        <div class="breakdown-val" id="modalScoreSig">-</div>
+                    </div>
+                    <div class="breakdown-item">
+                        <div class="breakdown-label">Récurrence (15%)</div>
+                        <div class="breakdown-val" id="modalScoreRec">-</div>
+                    </div>
+                </div>
+            </div>
+
+            <h4 style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem; text-transform: uppercase;">Données brutes complètes (JSON)</h4>
+            <pre id="modalJson"></pre>
+        </div>
+    </div>
+
+    <script>
+        let currentItemId = null;
+
+        async function updateItemStatus(itemId, newStatus) {
+            try {
+                const response = await fetch(`/opportunity/${itemId}/status`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status: newStatus })
+                });
+                const data = await response.json();
+                if (!data.success) {
+                    alert("Erreur lors de la mise à jour du statut : " + (data.error || "Inconnu"));
+                }
+            } catch (err) {
+                console.error("Erreur mise à jour statut", err);
+            }
+        }
+
+        async function viewRawDetails(itemId) {
+            try {
+                currentItemId = itemId;
+                const response = await fetch(`/opportunity/${itemId}`);
+                const data = await response.json();
+                if (data.error) {
+                    alert(data.error);
+                    return;
+                }
+
+                document.getElementById("modalTitle").innerText = data.title;
+                document.getElementById("modalUrl").innerHTML = `<a href="${data.url}" target="_blank" style="color: #60a5fa;">${data.url}</a>`;
+                
+                // Scoring
+                const bk = (data.raw_data && data.raw_data.scoring_breakdown) || {};
+                document.getElementById("modalTotalScore").innerText = `Total : ${data.score} / 100`;
+                document.getElementById("modalScoreEng").innerText = bk.engagement_score !== undefined ? `${bk.engagement_score}/100` : '-';
+                document.getElementById("modalScoreFresh").innerText = bk.freshness_score !== undefined ? `${bk.freshness_score}/100` : '-';
+                document.getElementById("modalScoreSig").innerText = bk.signal_score !== undefined ? `${bk.signal_score}/100` : '-';
+                document.getElementById("modalScoreRec").innerText = bk.recurrence_score !== undefined ? `${bk.recurrence_score}/100` : '-';
+
+                // Business Case
+                renderBusinessCase(data.business_case);
+
+                document.getElementById("modalJson").innerText = JSON.stringify(data.raw_data, null, 2);
+                document.getElementById("detailModal").style.display = "flex";
+            } catch (err) {
+                console.error("Erreur chargement détails", err);
+            }
+        }
+
+        function renderBusinessCase(bc) {
+            const btn = document.getElementById("btnGenerateBc");
+            const content = document.getElementById("bcContent");
+            const placeholder = document.getElementById("bcPlaceholder");
+
+            if (bc && bc.probleme_identifie) {
+                document.getElementById("bcProbleme").innerText = bc.probleme_identifie;
+                document.getElementById("bcTraction").innerText = bc.preuve_de_traction;
+                document.getElementById("bcAngle").innerText = bc.angle_produit_suggere;
+                content.style.display = "block";
+                placeholder.style.display = "none";
+                btn.innerText = "🔄 Régénérer";
+            } else {
+                content.style.display = "none";
+                placeholder.style.display = "block";
+                btn.innerText = "⚡ Générer Business Case";
+            }
+        }
+
+        async function generateCurrentBusinessCase() {
+            if (!currentItemId) return;
+            const btn = document.getElementById("btnGenerateBc");
+            btn.innerText = "⏳ Génération...";
+            btn.disabled = true;
+
+            try {
+                const response = await fetch(`/opportunity/${currentItemId}/generate-business-case`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                const res = await response.json();
+                if (res.success && res.business_case) {
+                    renderBusinessCase(res.business_case);
+                } else {
+                    alert("Erreur lors de la génération : " + (res.error || "Inconnu"));
+                }
+            } catch (err) {
+                console.error("Erreur génération Business Case", err);
+            } finally {
+                btn.disabled = false;
+            }
+        }
+
+        function closeModal(event) {
+            document.getElementById("detailModal").style.display = "none";
+        }
+    </script>
+</body>
+</html>

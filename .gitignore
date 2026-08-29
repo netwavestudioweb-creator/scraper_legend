@@ -1,0 +1,30 @@
+# Fichiers d'environnement & Secrets
+.env
+.env.local
+.env.*.local
+
+# Base de données locale de test
+*.db
+*.sqlite
+*.sqlite3
+
+# Python bytecode & cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+ENV/
+
+# Logs & artefacts IDE
+*.log
+.system_generated/
+.idea/
+.vscode/
+
+# OS specific
+.DS_Store
+Thumbs.db
