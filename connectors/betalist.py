@@ -33,46 +33,67 @@ class BetaListConnector(BaseConnector):
         self.max_items = max_items
 
     def scrape(self) -> list[dict]:
-        """Extrait les startups récemment soumises sur BetaList."""
+        """Extrait les startups récemment soumises sur BetaList avec parsing multi-layout résilient."""
         items = []
         try:
-            logger.info(f"[{self.source_name}] Récupération des startups en pré-lancement sur BetaList...")
+            logger.info(f"[{self.source_name}] Récupération des startups en pré-lancement sur {BETALIST_URL}...")
             response = self.fetch(BETALIST_URL)
+            
+            status_code = getattr(response, "status_code", 200)
+            html_len = len(response.text) if response and response.text else 0
+            logger.info(f"[{self.source_name}] Réponse HTTP: {status_code} | Taille HTML: {html_len} octets")
+
+            if not response or not response.text or html_len < 500:
+                logger.warning(f"[{self.source_name}] Contenu HTML vide ou trop court ({html_len} octets).")
+                return []
+
             soup = BeautifulSoup(response.text, "html.parser")
 
-            # Sélection des liens vers les startups
+            # Recherche de tous les liens pointant vers une startup (/startups/...)
             startup_links = soup.find_all("a", href=True)
             seen_urls = set()
+
+            logger.info(f"[{self.source_name}] Analyse de {len(startup_links)} balises <a> trouvées dans la page...")
 
             for link in startup_links:
                 href = link["href"]
                 if not href.startswith("/startups/"):
                     continue
 
-                name = link.get_text(strip=True)
-                if not name or len(name) < 2:
+                # Éviter les ancres spéciales ou catégories globales
+                clean_href = href.split("?")[0].rstrip("/")
+                if clean_href in ("/startups", "/startups/all", "/startups/markets", "/startups/regions"):
                     continue
 
-                url = f"https://betalist.com{href}"
+                url = f"https://betalist.com{clean_href}"
                 if url in seen_urls:
                     continue
                 seen_urls.add(url)
 
-                # Récupération du pitch depuis le conteneur parent
-                parent = link.find_parent("div")
+                name = link.get_text(strip=True)
                 pitch = ""
-                if parent:
-                    parent_text = parent.get_text(separator=" ", strip=True)
-                    # Enlever le nom pour garder le pitch
-                    pitch = parent_text.replace(name, "", 1).strip()
-                    if pitch.startswith("|") or pitch.startswith("-") or pitch.startswith(":"):
-                        pitch = pitch[1:].strip()
 
-                title = f"{name} : {pitch[:80]}" if pitch else name
+                # Support du DOM moderne Tailwind (overlay absolute inset-0 avec texte dans le conteneur parent)
+                parent = link.find_parent("div")
+                if parent:
+                    parent_text = parent.get_text(separator=" | ", strip=True)
+                    parts = [p.strip() for p in parent_text.split("|") if p.strip() and p.strip().upper() not in ("BOOSTED", "FEATURED", "TODAY", "YESTERDAY")]
+                    if parts:
+                        if not name:
+                            name = parts[0]
+                        if len(parts) > 1:
+                            pitch = " | ".join(parts[1:])
+
+                # Fallback de secours si le nom est manquant : reconstruction via le slug d'URL
+                if not name or len(name) < 2:
+                    slug = clean_href.replace("/startups/", "").replace("-", " ").strip().title()
+                    name = slug or "Startup Inconnue"
+
+                title = f"{name} : {pitch[:90]}" if pitch else name
                 description = pitch or f"Startup en phase de pré-lancement sur BetaList : {name}."
 
-                # Score initial pour un produit pré-lancement (signal précoce intéressant)
-                score = 22.0
+                # Métadonnées et scoring
+                score = 25.0
 
                 items.append({
                     "title": title,
@@ -93,14 +114,16 @@ class BetaListConnector(BaseConnector):
                 if len(items) >= self.max_items:
                     break
 
+            logger.info(f"[{self.source_name}] Succès : {len(items)} startups extraites sur {len(seen_urls)} liens uniques.")
             return items
+
         except Exception as e:
-            logger.error(f"[{self.source_name}] Erreur lors de la collecte BetaList: {e}")
+            logger.error(f"[{self.source_name}] Erreur lors de la collecte BetaList: {e}", exc_info=True)
             return []
 
 
 if __name__ == "__main__":
-    connector = BetaListConnector(max_items=5)
+    connector = BetaListConnector(max_items=10)
     resultats = connector.scrape()
     print(f"\n[OK] {len(resultats)} startups extraites depuis BetaList :\n")
     for r in resultats:
