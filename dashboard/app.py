@@ -249,5 +249,70 @@ def admin_trigger_collection():
     })
 
 
+@app.route("/admin/diagnostic/betalist", methods=["GET", "POST"])
+def admin_diagnostic_betalist():
+    """Route de diagnostic avancée pour inspecter la réponse HTTP et le parsing de BetaList depuis Render."""
+    expected_key = os.environ.get("ADMIN_TRIGGER_KEY", "").strip()
+    if not expected_key:
+        return jsonify({
+            "success": False,
+            "error": "La variable d'environnement ADMIN_TRIGGER_KEY n'est pas configurée sur le serveur."
+        }), 403
+
+    auth_header = request.headers.get("X-Admin-Key") or request.headers.get("Authorization", "")
+    provided_key = auth_header.replace("Bearer ", "").strip() if auth_header.startswith("Bearer ") else auth_header.strip()
+    if not provided_key:
+        provided_key = request.args.get("key", "").strip()
+    if not provided_key and request.is_json:
+        provided_key = (request.json or {}).get("key", "").strip()
+
+    if not hmac.compare_digest(provided_key, expected_key):
+        return jsonify({"success": False, "error": "Accès non autorisé : Clé ADMIN_TRIGGER_KEY invalide."}), 401
+
+    import requests
+    from bs4 import BeautifulSoup
+
+    render_commit = os.environ.get("RENDER_GIT_COMMIT") or os.environ.get("GIT_COMMIT") or "Non défini par Render"
+    
+    outbound_ip = "Inconnue"
+    try:
+        ip_resp = requests.get("https://api.ipify.org?format=json", timeout=5)
+        outbound_ip = ip_resp.json().get("ip", "Inconnue")
+    except Exception as e:
+        outbound_ip = f"Erreur IP: {e}"
+
+    betalist_diag = {}
+    try:
+        connector = BetaListConnector(max_items=10)
+        raw_response = connector.fetch("https://betalist.com/")
+        betalist_diag["status_code"] = raw_response.status_code
+        betalist_diag["headers"] = dict(raw_response.headers)
+        betalist_diag["html_length"] = len(raw_response.text)
+        betalist_diag["first_500_chars"] = raw_response.text[:500]
+
+        soup = BeautifulSoup(raw_response.text, "html.parser")
+        all_links = soup.find_all("a", href=True)
+        startup_links = [(a["href"], a.get_text(strip=True), a.get("class")) for a in all_links if a["href"].startswith("/startups/")]
+        betalist_diag["total_a_tags"] = len(all_links)
+        betalist_diag["total_startup_links"] = len(startup_links)
+        betalist_diag["sample_startup_links"] = startup_links[:10]
+
+        scraped_items = connector.scrape()
+        betalist_diag["scraped_items_count"] = len(scraped_items)
+        betalist_diag["scraped_items"] = scraped_items
+
+    except Exception as e:
+        betalist_diag["error"] = str(e)
+        betalist_diag["error_type"] = type(e).__name__
+
+    return jsonify({
+        "success": True,
+        "render_commit_sha": render_commit,
+        "outbound_ip": outbound_ip,
+        "betalist_diagnostic": betalist_diag
+    })
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=PORT, debug=DEBUG)
+

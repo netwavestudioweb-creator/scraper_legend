@@ -31,7 +31,7 @@ SQLITE_FALLBACK_URL = "sqlite:///scraper_legende.db"
 # Paramètres de scraping éthique
 SCRAPER_USER_AGENT = os.getenv(
     "SCRAPER_USER_AGENT",
-    "Mozilla/5.0 (compatible; ScraperLegendeBot/2.0; +https://github.com/votre-compte/scraper-legende)"
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 (compatible; ScraperLegende/2.0)"
 )
 SCRAPER_DELAY_SECONDS = float(os.getenv("SCRAPER_DELAY_SECONDS", "1.5"))
 SCRAPER_TIMEOUT = int(os.getenv("SCRAPER_TIMEOUT", "15"))
