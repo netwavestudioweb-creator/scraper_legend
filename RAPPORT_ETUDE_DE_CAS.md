@@ -9,6 +9,9 @@ Dans le cadre du développement de mes projets SaaS et de mon portfolio en Ingé
 
 Le projet a été entièrement reconstruit selon une démarche rigoureuse par phases incrémentales, garantissant un système démontrable et résilient à chaque étape.
 
+![Aperçu Général Scraper Légende](./docs/preview-showcase.png)
+*Figure 1 : Vue d'ensemble du tableau de bord avec répartition des opportunités par tranche de score et modal d'inspection détaillée.*
+
 ---
 
 ## 🔍 2. Problématique & Objectifs Techniques
@@ -90,6 +93,9 @@ $$\mathbf{Score} = (0.40 \times S_{\text{Engagement}}) + (0.20 \times S_{\text{F
 3. **Signal Métier (25%)** : $100$ pts pour les demandes explicites de solutions (*"looking for"*, *"alternative"*), $90$ pts pour les `pain_point`, $50$ pts pour les `showcase`.
 4. **Récurrence Inter-sources (15%)** : $100$ pts si la thématique émerge sur $\ge 3$ sources distinctes, $70$ pts sur 2 sources.
 
+![Modal de Scoring et Business Case](./docs/preview-2-scoring-detail.png)
+*Figure 2 : Décomposition analytique du score en 4 jauges de progression et génération structurée du Business Case en 3 volets.*
+
 ---
 
 ## 📄 7. Génération Automatisée de Business Cases
@@ -106,6 +112,9 @@ Pour rendre les données immédiatement actionnables, le système génère un r�
 ## 📊 8. Synthèse Chiffrée & Résultats en Production
 
 *Données réelles issues de la base PostgreSQL de production Render :*
+
+![Dashboard Overview](./docs/preview-1-overview.png)
+*Figure 3 : Tableau de bord de production avec les 5 KPI cards et le flux d'opportunités trié par score décroissant.*
 
 - **7 Sources Développées & Validées** fonctionnellement.
 - **6 Sources Actives en Continu en Production Cloud** (Hacker News, Product Hunt, GitHub Trending, Stack Exchange, AppSumo, Wellfound).

@@ -10,6 +10,13 @@ Moteur de veille concurrentielle multi-sources conçu pour détecter les signaux
 
 ---
 
+## 📸 Aperçu de l'Application
+
+![Aperçu Général Scraper Légende](./docs/preview-showcase.png)
+*Figure 1 : Interface Obsidian Glassmorphism avec bandeau 5 KPIs (droite) et modal d'inspection du scoring & business case (gauche).*
+
+---
+
 ## 🔗 Démonstration & Liens du Projet
 
 - 🌐 **Application en Ligne (Render)** : **[https://scraper-legend.onrender.com](https://scraper-legend.onrender.com)**
@@ -25,6 +32,9 @@ Moteur de veille concurrentielle multi-sources conçu pour détecter les signaux
 - **Système de déduplication strict** : Contrainte d'unicité et index sur `(source, url)` pour des collectes répétées 100% idempotentes.
 - **Connecteurs modulaires (`BaseConnector`)** : Sessions HTTP avec politesse de requêtage, respect de `robots.txt`, User-Agent éthique et délais de courtoisie.
 - **Dashboard Flask Haute Couture** : Interface moderne Obsidian Glassmorphism avec véritables icônes vectorielles SVG, 5 KPI hero cards, filtres multi-critères, recherche, tri par score, filtres par tranche (`hot`, `qualified`, `cold`) et génération de Business Case à la demande.
+
+![Vue d'ensemble du Dashboard](./docs/preview-1-overview.png)
+*Figure 2 : Tableau de bord principal avec les 5 KPI cards compactes et le système de filtres par source et tranche de score.*
 
 ---
 
@@ -57,6 +67,9 @@ $$\mathbf{Score} = (0.40 \times S_{\text{Engagement}}) + (0.20 \times S_{\text{F
 - 🔥 **Chaudes ($\ge 70$ pts)** : Signaux forts combinant fort engagement, forte fraîcheur et besoin explicite.
 - 💡 **Qualifiées ($50-69$ pts)** : Signaux réguliers à fort potentiel d'approfondissement.
 - 👁️ **En Veille ($< 50$ pts)** : Veille passive et signaux émergents.
+
+![Détail du Scoring et Business Case](./docs/preview-2-scoring-detail.png)
+*Figure 3 : Modal d'inspection détaillée affichant la décomposition analytique du score (4 composantes) et le Business Case en 3 volets.*
 
 ---
 
